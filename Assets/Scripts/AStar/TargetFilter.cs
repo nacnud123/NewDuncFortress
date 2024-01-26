@@ -5,6 +5,4 @@ using UnityEngine;
 public class TargetFilter
 {
     public System.Func<Entity, bool> Accepts { get; set; }
-
-    //public virtual bool Accept(Entity e) { return true; }
 }
