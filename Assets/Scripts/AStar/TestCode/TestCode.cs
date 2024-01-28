@@ -75,8 +75,8 @@ namespace DuncFortress.AStar
             endPos = objEndCube.transform;
 
             //Assign StartNode and Goal Node
-            startNode = new Node(GridManager.instance.GetGridCellCenter(GridManager.instance.GetGridIndex(startPos.position)));
-            goalNode = new Node(GridManager.instance.GetGridCellCenter(GridManager.instance.GetGridIndex(endPos.position)));
+            startNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(startPos.position)));
+            goalNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(endPos.position)));
 
             pathArray = AStar.FindPath(startNode, goalNode);
         }

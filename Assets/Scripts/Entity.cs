@@ -1,16 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DuncFortress.AStar;
 
 public class Entity : MonoBehaviour
 {
     public float x, y, r;
     public bool alive = true;
 
+    public Node currNode;
+
+
+
     private void Awake()
     {
         x = transform.position.x;
         y = transform.position.y;
+        currNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(this.transform.position)));
         r = 1;
     }
 

@@ -7,11 +7,11 @@ public class StockPile : Entity
 
     public override void tick()
     {
-        Person person = getRandomPerson(50, 50, true);
+        /*Person person = getRandomPerson(50, 50, true);
         if(person != null && person.job == null)
         {
             person.setJob(new Gather(GameManager.init.WOOD, this));
-        }
+        }*/
     }
 
     public override bool acceptsResource(int resourceID)

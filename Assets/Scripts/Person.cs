@@ -1,19 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DuncFortress.AStar;
 
 public class Person : Entity
 {
-    public int wanderTime = 0;
+    public float wanderTime = 0;
     public Job job;
     public float moveTick = 0;
 
     [SerializeField] private int hp = 100;
     private int maxHp = 100;
-    private int xp = 0;
+    /*private int xp = 0;
     private int nextLevel = 1;
-    private int level = 0;
-    public float rot = 0;
+    private int level = 0;*/
+    //public float rot = 0;
+   
+
+    public float speed = 2f;
 
     private void Awake()
     {
@@ -23,8 +27,9 @@ public class Person : Entity
 
     public override void tick()
     {
+        currNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(this.transform.position)));
 
-        if(job != null)
+        if (job != null)
         {
             job.tick();
         }
@@ -34,56 +39,24 @@ public class Person : Entity
             hp++;
         }
 
-        float speed = .2f;
-        if (wanderTime == 0 && job != null && job.hasTarget())
+        if(wanderTime == 0 && job != null)
         {
-            float xd = job.xTarget - x;
-            float yd = job.yTarget - y;
-            float rd = job.targetDist + r;
-            if (xd * xd + yd * yd < rd * rd)
-            {
-                job.arrived();
-                speed = 0;
-            }
-            rot = Mathf.Atan2(yd, xd);
+            //job.hasTarget();
         }
-        else
-        {
-            rot += (Random.value - .5f) * Random.value * 2;
-        }
-        
-        if (wanderTime > 0) wanderTime--;
-        
-        speed += level * 0.1f;
-        
-        float xt = x + Mathf.Cos(rot) * .4f * speed;
-        float yt = y + Mathf.Sin(rot) * .4f * speed;
-        if(GameManager.init.isFree(xt, yt, r, this))
-        {
-            x = xt;
-            y = yt;
-        }
-        else
-        {
-            if (job != null)
-            {
-                Entity collided = GameManager.init.getEntityAt(xt, yt, r, this);
-                if (collided != null)
-                {
-                    job.collide(collided);
-                }
-                else
-                {
-                    job.cantReach();
-                }
-            }
-            rot = (Random.value) * Mathf.PI * 2;
-            wanderTime = Random.Range(0, 31) + 3;
-        }         
-        
-        moveTick += speed;
 
-        transform.position = new Vector3(x, y, 0);
+        if(job == null)
+        {
+            if(JobQueue.init.globalJobQueue.Count > 0)
+            {
+                setJob(JobQueue.init.Dequeue());
+            }
+            else
+            {
+                Debug.Log("No Job!");
+                setJob(new Wander());
+            }
+           
+        }
 
     }
 

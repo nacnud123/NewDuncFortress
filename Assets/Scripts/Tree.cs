@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Tree : Entity
 {
-    private int stamina = 100;
+    public int stamina = 100;
 
     private void Awake()
     {
@@ -13,7 +14,7 @@ public class Tree : Entity
 
     public override bool gatherResource(int resourceID)
     {
-        stamina -= 1;
+        stamina -= 5;
         if(stamina <= 0)
         {
             alive = false;
@@ -23,6 +24,5 @@ public class Tree : Entity
     }
 
     public override bool givesResources(int resourceID){ return true; }
-
 
 }

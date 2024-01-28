@@ -61,7 +61,7 @@ namespace DuncFortress.AStar
                 }
 
                 ArrayList neighbours = new ArrayList();
-                GridManager.instance.GetNeighbours(node, neighbours);
+                GridManager.init.GetNeighbours(node, neighbours);
 
                 #region CheckNeighbours
 

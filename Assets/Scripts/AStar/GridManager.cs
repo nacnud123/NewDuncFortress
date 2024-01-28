@@ -13,7 +13,7 @@ namespace DuncFortress.AStar
         public delegate bool GoalEvaluator(Node tile);
         // This defines a static instance property that attempts to find the manager object in the scene and
         // returns it to the caller.
-        public static GridManager instance
+        public static GridManager init
         {
             get
             {

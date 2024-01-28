@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DuncFortress.AStar;
 
 public class Job
 {
@@ -11,12 +12,24 @@ public class Job
     protected int bonusRadius = 2;
     protected int boreTime = 500;
 
-    public void init(Person _person)
+    public ArrayList pathArray;
+    public int index = 0;
+    public Vector3 nextPos;
+
+    public Node jobNode;
+
+    public bool isAtLoc = false;
+
+    public bool isAssigned = false;
+
+    public string name { get; protected set; }
+
+    public virtual void init(Person _person)
     {
         this.person = _person;
     }
 
-    public void tick()
+    public virtual void tick()
     {
         if(boreTime > 0)
         {
@@ -42,12 +55,13 @@ public class Job
 
         xTarget = target.transform.position.x; // Change to just target.x same for y
         yTarget = target.transform.position.y;
+        jobNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(target.transform.position)));
         targetDist = target.r + bonusRadius;
         return true;
     }
 
 
-    public virtual void setTarget(Entity e) { target = e; }
+    public virtual void setTarget(Entity e) { target = e; jobNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(target.transform.position))); }
 
     public virtual void arrived() { }
 
@@ -79,6 +93,7 @@ public class Goto : Job
     private GameObject _target;
     public Goto(GameObject target_)
     {
+        name = "Goto";
         this._target = target_;
         bonusRadius = 15;
     }
@@ -87,53 +102,4 @@ public class Goto : Job
 
     public override void arrived() { person.setJob(null); }
 
-}
-
-public class Gather: Job
-{
-    bool hasResource = false;
-    public int resourceID = 0;
-
-    private Entity returnTo;
-
-    public Gather(int id, Entity _returnTo)
-    {
-        resourceID = id;
-        this.returnTo = _returnTo;
-    }
-
-    public override int getCarried() { return hasResource ? resourceID : -1; }
-
-    public override bool isValidTarget(Entity e)
-    {
-        if(!hasResource && e.givesResources(resourceID))
-        {
-            return true;
-        }
-        if(hasResource && e.acceptsResource(resourceID)) // Need to fix
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public override void arrived()
-    {
-        if(!hasResource && target != null && target.givesResources(resourceID))
-        {
-            if (target.gatherResource(resourceID))
-            {
-                hasResource = true;
-                target = returnTo;
-            }
-            boreTime = 1000;
-        }
-        else if(hasResource && target != null && target.acceptsResource(resourceID))
-        {
-            hasResource = false;
-            target = null;
-            GameManager.init.woodAvail += 1;
-            person.setJob(null);
-        }
-    }
 }

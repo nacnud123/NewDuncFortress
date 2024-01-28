@@ -74,6 +74,38 @@ public class GameManager : MonoBehaviour
         return closestEntity;
     }
 
+    public Entity findClosestEntity(Entity inE, Entity exception = null, TargetFilter filter = null)
+    {
+        float closest = 10000000;
+        Entity closestEntity = null;
+        List<Entity> nearEntitys = new List<Entity>();
+
+        for (int i = 0; i < entities.Count; i++)
+        {
+            Entity e = entities[i];
+            if (e == exception) continue;
+            if (filter != null && !filter.Accepts(e)) continue;
+            float dist = Vector3.Distance(inE.gameObject.transform.position, e.transform.position);
+            if(dist < closest)
+            {
+                closestEntity = e;
+                closest = dist;
+            }
+
+        }
+        return closestEntity;
+    }
+
+    public Entity getEntityAtPos(Vector3 pos)
+    {
+        foreach(Entity e in entities)
+        {
+            if (e.transform.position == pos)
+                return e;
+        }
+        return null;
+    }
+
     public bool isFree(float x, float y, float r, Entity source)
     {
         for(int i = 0; i< entities.Count; i++)
