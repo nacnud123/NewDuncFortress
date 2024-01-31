@@ -75,7 +75,7 @@ public class Person : Entity
         newItem.transform.position = this.transform.position;
     }
 
-    public void dropOffItem(StockPile place = null)
+    public void dropOffItem(StockPile place = null) // = null may be redundent
     {
         inventory.inInv.transform.parent = place.displaySpr.gameObject.transform;
         inventory.inInv.transform.position = place.displaySpr.gameObject.transform.position;

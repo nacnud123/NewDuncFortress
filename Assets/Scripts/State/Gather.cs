@@ -8,13 +8,17 @@ public class Gather : Job
     bool hasResource = false;
     public int resourceID = 0;
 
-    public Gather(int id, Entity _target)
+    public Gather(int id, Entity _target, Job _nextJob = null):base("Gather", _nextJob)
     {
         priority = JobPriority.High;
-        name = "Gather";
         resourceID = id;
         target = _target;
         jobNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(target.transform.position)));
+    }
+
+    public override void init(Person _person)
+    {
+        base.init(_person);
     }
 
     public override void tick()
@@ -23,7 +27,7 @@ public class Gather : Job
         if (isAtLoc == false && target != null)
         {
             jobNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(target.transform.position)));
-            person.setJob(new Move(this));
+            person.setJob(new Move(jobNode, this));
         }
         if (isAtLoc)
         {
@@ -55,22 +59,7 @@ public class Gather : Job
                 hasResource = true;
                 person.setJob(null);
             }
-            boreTime = 1000;
+            //boreTime = 1000;
         }
     }
-
-    /*public Entity getClosestStockpile(float r, float s)
-    {
-        TargetFilter stockFilter = new TargetFilter
-        {
-            Accepts = e => e.acceptsResource(resourceID)
-        };
-
-        Entity e = GameManager.init.findClosestEntity(person, person, stockFilter);
-        if(e is StockPile)
-        {
-            return e;
-        }
-        return null;
-    }*/
 }

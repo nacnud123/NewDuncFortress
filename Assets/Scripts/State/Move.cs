@@ -5,9 +5,13 @@ using DuncFortress.AStar;
 
 public class Move : Job
 {
-    private Job lastJob;
     private Node endNode;
     private Node realEndNode;
+
+    public Move(Node end, Job _nextJob = null) : base("Move", _nextJob)
+    {
+        endNode = end;
+    }
 
     public override void init(Person _person)
     {
@@ -17,27 +21,14 @@ public class Move : Job
         nextPos = ((Node)pathArray[0]).position;
     }
 
-    public Move(Job _lastJob)
-    {
-        name = "Move";
-        lastJob = _lastJob;
-        endNode = _lastJob.jobNode;
-    }
-
-    public Move(Node _endNode)
-    {
-        name = "Move";
-        endNode = _endNode;
-    }
-
     public override void tick()
     {
-        Debug.Log("Move Tick!");
+        //Debug.Log("Move Tick!");
         if(pathArray.Count > 2)
         {
             realEndNode = ((Node)pathArray[pathArray.Count - 2]);
         }
-        else
+        else // Just used for wander state.
         {
             realEndNode = ((Node)pathArray[pathArray.Count - 1]);
         }
@@ -69,10 +60,10 @@ public class Move : Job
 
     public override void arrived()
     {
-        if (lastJob != null)
+        if (nextJob != null) // Refactor maybe
         {
-            lastJob.isAtLoc = true;
-            person.setJob(lastJob);
+            nextJob.isAtLoc = true;
+            person.setJob(nextJob);
         }
         else
         {

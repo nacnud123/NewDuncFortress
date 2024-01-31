@@ -7,22 +7,21 @@ public class Wander : Job
 {
     public float totalIdelTime = 0;
     private float timeSpendIdle;
-    public Wander()
+    public Wander(Job _nextJob = null): base("Wander", _nextJob)
     {
-        name = "Wander";
+        timeSpendIdle = 0f;
+        totalIdelTime = Random.Range(.2f, 1.5f);
     }
 
 
     public override void init(Person _person)
     {
         base.init(_person);
-        timeSpendIdle = 0f;
-        totalIdelTime = Random.Range(.2f, 2.0f);
     }
 
     public override void tick()
     {
-        Debug.Log("Wander Tick!");
+        
         Random.seed = System.DateTime.Now.Millisecond;
 
         timeSpendIdle += Time.deltaTime;
@@ -32,6 +31,9 @@ public class Wander : Job
             GridManager.init.GetNeighbours(person.currNode, neighbors);
 
             Node endNode = (Node)neighbors[Random.Range(0, neighbors.Count)];
+
+            //Debug.Log("Wander Tick!");
+
             person.setJob(new Move(endNode));
         }
 

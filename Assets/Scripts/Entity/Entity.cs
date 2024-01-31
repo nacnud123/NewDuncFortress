@@ -12,39 +12,16 @@ public class Entity : MonoBehaviour
 
 
 
-    private void Awake()
+    public virtual void Start()
     {
         x = transform.position.x;
         y = transform.position.y;
         currNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(this.transform.position)));
         r = 1;
-    }
-
-    public float distance(Entity e)
-    {
-        float xd = x - e.x;
-        float yd = y - e.y;
-        return xd * xd + yd * yd;
+        GameManager.init.entities.Add(this);
     }
 
     public virtual void tick() { }
-
-    public bool collides(float ex, float ey, float er)
-    {
-        if (r < 0) return false;
-
-        float xd = x - ex;
-        float yd = y - ey;
-        return (xd * xd + yd * yd) < (r * r + er * er);
-    }
-
-    public Entity getRandomTarget(float radius, float rnd, TargetFilter filter = null)
-    {
-        float xt = x + (Random.value * 2 - 1) * rnd;
-        float yt = y + (Random.value * 2 - 1) * rnd;
-        return GameManager.init.getEntityAt(xt, yt, radius, this, filter);
-
-    }
 
     public virtual bool givesResources(int resourceID)
     {

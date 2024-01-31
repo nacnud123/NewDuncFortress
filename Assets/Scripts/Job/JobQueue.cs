@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
+
 public class JobQueue : MonoBehaviour
 {
     public static JobQueue init;
 
     public SortedList<Job.JobPriority, Job> globalJobQueue = new SortedList<Job.JobPriority, Job>();
-    public List<Job> waitingJobs = new List<Job>();
+    [SerializeField] public List<Job> waitingJobs = new List<Job>();
 
     private void Awake()
     {
