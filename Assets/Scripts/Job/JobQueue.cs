@@ -2,21 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class JobQueue : MonoBehaviour
 {
     public static JobQueue init;
-    public List<Job> globalJobQueue = new List<Job>();
+
+    public SortedList<Job.JobPriority, Job> globalJobQueue = new SortedList<Job.JobPriority, Job>();
     public List<Job> waitingJobs = new List<Job>();
 
     private void Awake()
     {
         init = this;
+        globalJobQueue = new SortedList<Job.JobPriority, Job>(new DuplicateKeyComparer<Job.JobPriority>(true));
     }
 
     public void Enqueue(Job job)
     {
         Debug.Log($"Enqueue {job.name}");
-        globalJobQueue.Add(job);
+        globalJobQueue.Add(job.priority, job);
     }
 
     public Job Dequeue()
@@ -26,7 +29,7 @@ public class JobQueue : MonoBehaviour
             return null;
         }
 
-        Job job = globalJobQueue[0];
+        Job job = globalJobQueue.Values[0];
         globalJobQueue.RemoveAt(0);
         return job;
     }

@@ -6,9 +6,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager init;
 
-    public int WOOD = 0;
-    public int ROCK = 1;
-    public int FOOD = 2;
+    public const int WOOD = 0;
+    public const int ROCK = 1;
+    public const int FOOD = 2;
 
     public int woodAvail = 0;
 

@@ -10,6 +10,7 @@ public class Gather : Job
 
     public Gather(int id, Entity _target)
     {
+        priority = JobPriority.High;
         name = "Gather";
         resourceID = id;
         target = _target;
@@ -52,21 +53,13 @@ public class Gather : Job
             if (target.gatherResource(resourceID))
             {
                 hasResource = true;
-                target = getClosestStockpile(50,50);
-                isAtLoc = false;
+                person.setJob(null);
             }
             boreTime = 1000;
         }
-        else if (hasResource && target != null && target.acceptsResource(resourceID))
-        {
-            hasResource = false;
-            target = null;
-            GameManager.init.woodAvail += 1;
-            person.setJob(null);
-        }
     }
 
-    public Entity getClosestStockpile(float r, float s)
+    /*public Entity getClosestStockpile(float r, float s)
     {
         TargetFilter stockFilter = new TargetFilter
         {
@@ -79,5 +72,5 @@ public class Gather : Job
             return e;
         }
         return null;
-    }
+    }*/
 }

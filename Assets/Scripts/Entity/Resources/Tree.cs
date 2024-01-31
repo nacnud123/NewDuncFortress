@@ -7,6 +7,8 @@ public class Tree : Entity
 {
     public int stamina = 100;
 
+    public Resource dropItem;
+
     private void Awake()
     {
         r = .1f;
@@ -18,6 +20,7 @@ public class Tree : Entity
         if(stamina <= 0)
         {
             alive = false;
+            Instantiate(dropItem, transform.position, Quaternion.identity);
             return true;
         }
         return false;

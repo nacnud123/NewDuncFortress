@@ -5,6 +5,17 @@ using DuncFortress.AStar;
 
 public class Job
 {
+
+    public enum JobPriority
+    {
+        High,
+        Medium,
+        Low
+    }
+
+
+    public JobPriority priority;
+
     protected Person person;
 
     public float xTarget, yTarget, targetDist;

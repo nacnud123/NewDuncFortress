@@ -13,6 +13,8 @@ namespace DuncFortress.AStar
         public Vector3 position;            //Position of the node
         #endregion
 
+
+
         /// <summary>
         //Default Constructor
         /// </summary>

@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 3896944012653670546}
   - component: {fileID: 3896944012653670545}
   - component: {fileID: 3896944012653670544}
+  - component: {fileID: 1235311204}
+  - component: {fileID: 1235311203}
   m_Layer: 0
   m_Name: Person
   m_TagString: Untagged
@@ -97,11 +99,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d104ea68be1f574a898e6572d748ffa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  x: 0
-  y: 0
+  x: 7.5
+  y: 7.5
   r: 0
   alive: 1
   wanderTime: 0
   moveTick: 0
+  inventory: {fileID: 1235311203}
   hp: 100
-  rot: 0
+  speed: 50
+--- !u!61 &1235311204
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3896944012653670575}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &1235311203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3896944012653670575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d830eb303183b0e4789b23582508150a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inInv: {fileID: 0}

@@ -16,7 +16,7 @@ public class MouseController : MonoBehaviour
             if (hit.collider != null)
             {
                 Vector3 targetPos = hit.point;
-                Debug.Log(targetPos);
+                //Debug.Log(targetPos);
                 if (hit.collider.GetComponent<Tree>())
                 {
                     Debug.Log("Clicked on tree!");

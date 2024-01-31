@@ -9,6 +9,8 @@ public class Person : Entity
     public Job job;
     public float moveTick = 0;
 
+    public Inv inventory;
+
     [SerializeField] private int hp = 100;
     private int maxHp = 100;
     /*private int xp = 0;
@@ -66,5 +68,24 @@ public class Person : Entity
         if (job != null) job.init(this);
     }
 
+    public void pickUpItem(Entity newItem)
+    {
+        inventory.inInv = newItem;
+        newItem.transform.parent = this.transform;
+        newItem.transform.position = this.transform.position;
+    }
+
+    public void dropOffItem(StockPile place = null)
+    {
+        inventory.inInv.transform.parent = place.displaySpr.gameObject.transform;
+        inventory.inInv.transform.position = place.displaySpr.gameObject.transform.position;
+        if(place != null)
+        {
+            place.dropOffItem(inventory.inInv);
+        }
+
+        //Destroy(inventory.inInv.gameObject);
+        inventory.inInv = null;
+    }
     
 }

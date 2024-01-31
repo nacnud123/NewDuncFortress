@@ -4,10 +4,5 @@ using UnityEngine;
 
 public class Inv : MonoBehaviour
 {
-    public GameObject inHands;
-
-    public void dropItem()
-    {
-        inHands.transform.parent = null;
-    }
+    public Entity inInv = null;
 }
