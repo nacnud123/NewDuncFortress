@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public int woodAvail = 0;
 
     public List<Entity> entities = new List<Entity>();
+    public List<GameObject> cropObj = new List<GameObject>();
+
 
     private void Awake()
     {

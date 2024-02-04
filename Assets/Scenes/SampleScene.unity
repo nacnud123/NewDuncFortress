@@ -918,6 +918,7 @@ GameObject:
   m_Component:
   - component: {fileID: 439890097}
   - component: {fileID: 439890096}
+  - component: {fileID: 439890098}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -992,6 +993,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &439890098
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 439890094}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1846,9 +1873,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   woodAvail: 0
-  timeMaxAmount: 0.01
-  timer: 0
   entities: []
+  cropObj:
+  - {fileID: 6459086484263817301, guid: a12e8549bc34ee549adde5cb5f2010d0, type: 3}
 --- !u!4 &1235887191
 Transform:
   m_ObjectHideFlags: 0
@@ -1876,6 +1903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f86dcaacac9dec74bb1471ec69c1c509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  farmPlot: {fileID: 5378469504090641751, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
 --- !u!114 &1235887193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2476,6 +2504,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -2676,3 +2705,64 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 11aa8f23f3f519440925d62d60b0cd99, type: 3}
+--- !u!1001 &8653654065361423044
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5378469504090641749, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
+      propertyPath: m_RootOrder
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 5378469504090641749, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5378469504090641749, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5378469504090641749, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5378469504090641749, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5378469504090641749, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5378469504090641749, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5378469504090641749, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5378469504090641749, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5378469504090641749, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5378469504090641749, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5378469504090641751, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
+      propertyPath: m_Name
+      value: FarmPlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 5378469504090641751, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cdf2d2a65ad9b07499935b4936cd64b5, type: 3}
