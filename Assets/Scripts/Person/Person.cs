@@ -77,15 +77,25 @@ public class Person : Entity
 
     public void dropOffItem(StockPile place = null) // = null may be redundent
     {
-        inventory.inInv.transform.parent = place.displaySpr.gameObject.transform;
-        inventory.inInv.transform.position = place.displaySpr.gameObject.transform.position;
-        if(place != null)
+        if(place == null)
         {
-            place.dropOffItem(inventory.inInv);
+            inventory.inInv.alive = false;
+
+        }
+        else
+        {
+            inventory.inInv.transform.parent = place.displaySpr.gameObject.transform;
+            inventory.inInv.transform.position = place.displaySpr.gameObject.transform.position;
+            if (place != null)
+            {
+                place.dropOffItem(inventory.inInv);
+            }
+
+            //Destroy(inventory.inInv.gameObject);
+            inventory.inInv = null;
         }
 
-        //Destroy(inventory.inInv.gameObject);
-        inventory.inInv = null;
+        
     }
     
 }

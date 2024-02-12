@@ -239,6 +239,31 @@ namespace DuncFortress.AStar
             return tile => tile == endNode;
         }
 
+        public void rebuildObsticalList()
+        {
+            obstacleList = GameObject.FindGameObjectsWithTag("Obstacle");
+
+            //Run through the bObstacle list and set the bObstacle position
+            if (obstacleList != null && obstacleList.Length > 0)
+            {
+                foreach (GameObject data in obstacleList)
+                {
+                    int indexCell = GetGridIndex(data.transform.position);
+                    int col = GetColumn(indexCell);
+                    int row = GetRow(indexCell);
+
+                    //Also make the node as blocked status
+                    nodes[row, col].MarkAsObstacle();
+                }
+            }
+        }
+
+        /*public Node getNodeFromVec3(Vector3 pos)
+        {
+            Vector3 tempPos = GetGridCellCenter(GetGridIndex(pos));
+            return 
+        }*/
+
         /// <summary>
         /// Show Debug Grids and obstacles inside the editor
         /// </summary>

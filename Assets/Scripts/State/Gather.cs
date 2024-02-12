@@ -57,7 +57,7 @@ public class Gather : Job
             if (target.gatherResource(resourceID))
             {
                 hasResource = true;
-                person.setJob(null);
+                Finished();
             }
             //boreTime = 1000;
         }

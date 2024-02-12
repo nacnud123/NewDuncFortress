@@ -6,7 +6,7 @@ using DuncFortress.AStar;
 public class MouseController : MonoBehaviour
 {
 
-    public GameObject farmPlot;
+    public GameObject Wall;
 
     private void Update()
     {
@@ -36,11 +36,13 @@ public class MouseController : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
             if (hit.collider != null)
             {
-                Vector3 targetPos = hit.point;
+               Vector3 targetPos = hit.point;
                 Debug.Log(targetPos);
                 Vector3 temp = GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(targetPos));
                 temp.z = 0;
-                Instantiate(farmPlot, temp, Quaternion.identity);
+                Instantiate(Wall, temp, Quaternion.identity);
+
+
             }
         }
     }
