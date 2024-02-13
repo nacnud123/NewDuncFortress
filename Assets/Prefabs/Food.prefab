@@ -103,4 +103,6 @@ MonoBehaviour:
   alive: 1
   waiting: 0
   position: 0
+  itemSR: {fileID: 6459086484263817302}
+  ammount: 1
   itemType: 2

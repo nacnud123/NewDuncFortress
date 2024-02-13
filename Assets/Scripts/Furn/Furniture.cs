@@ -14,7 +14,7 @@ public class Furniture : Entity
     public SpriteRenderer sr;
     public Sprite displaySpritre;
 
-
+    // TODO: Flesh-out
     public Furniture(string _name = "", int _buildTime = 20)
     {
         entityName = _name;

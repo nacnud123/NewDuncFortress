@@ -9,7 +9,7 @@ public class Person : Entity
     public Job job;
     public float moveTick = 0;
 
-    public Inv inventory;
+    public Inventory inventory;
 
     [SerializeField] private int hp = 100;
     private int maxHp = 100;
@@ -68,34 +68,29 @@ public class Person : Entity
         if (job != null) job.init(this);
     }
 
-    public void pickUpItem(Entity newItem)
+    public void pickUpItem(Resource newItem)
     {
-        inventory.inInv = newItem;
-        newItem.transform.parent = this.transform;
-        newItem.transform.position = this.transform.position;
+        if(!inventory.addItem(newItem))
+        {
+            return;
+        }
+        //newItem.transform.parent = this.transform;
+        //newItem.transform.position = this.transform.position;
     }
 
-    public void dropOffItem(StockPile place = null) // = null may be redundent
+    public void dropOffItem(Inventory place = null) // = null may be redundent
     {
-        if(place == null)
+        Debug.Log("Person DropOffItem!");
+        if (place != null)
         {
-            inventory.inInv.alive = false;
-
+            place.addItem(this.inventory);
         }
-        else
-        {
-            inventory.inInv.transform.parent = place.displaySpr.gameObject.transform;
-            inventory.inInv.transform.position = place.displaySpr.gameObject.transform.position;
-            if (place != null)
-            {
-                place.dropOffItem(inventory.inInv);
-            }
+    }
 
-            //Destroy(inventory.inInv.gameObject);
-            inventory.inInv = null;
-        }
-
-        
+    public void dropItem(Resource specificItem = null)
+    {
+        inventory.dropItem(specificItem);
+        inventory.sr.sprite = null;
     }
     
 }

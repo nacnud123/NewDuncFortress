@@ -7,14 +7,11 @@ public class Resource : Entity
     public bool waiting = false;
     public int position = 0;
 
-    public enum ItemType
-    {
-        WOOD = GameManager.WOOD,
-        ROCK = GameManager.ROCK,
-        FOOD = GameManager.FOOD
-    }
+    public SpriteRenderer itemSR;
 
-    public ItemType itemType;
+    public int ammount = 1;
+
+    public GameManager.ITEMTYPE itemType;
 
     public override void Start()
     {
@@ -22,11 +19,11 @@ public class Resource : Entity
 
         if (GameManager.init.areOpenStockPiles())
         {
-            JobQueue.init.Enqueue(new Haul((int)itemType, this));
+            JobQueue.init.Enqueue(new Haul((int)itemType, this, null, true));
         }
         else
         {
-            JobQueue.init.waitingJobs.Add(new Haul((int)itemType, this));
+            JobQueue.init.waitingJobs.Add(new Haul((int)itemType, this, null, true));
             waiting = true;
             position = JobQueue.init.waitingJobs.Count - 1;
         }

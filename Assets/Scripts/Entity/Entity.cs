@@ -11,12 +11,11 @@ public class Entity : MonoBehaviour
     public Node currNode;
 
 
-
     public virtual void Start()
     {
         x = transform.position.x;
         y = transform.position.y;
-        currNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(this.transform.position)));
+        currNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(this.transform.position))); // Need to change
         r = 1;
         GameManager.init.entities.Add(this);
     }

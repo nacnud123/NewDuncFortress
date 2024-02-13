@@ -229,4 +229,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d830eb303183b0e4789b23582508150a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inInv: {fileID: 0}
+  x: 0
+  y: 0
+  r: 0
+  alive: 1
+  inInv: []
+  isStockpile: 0
+  isFull: 0
+  sr: {fileID: 4356265205375147055}

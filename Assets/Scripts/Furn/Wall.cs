@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Wall : Furniture
 {
+
+
     Wall():base("Wall", 20)
     {
 
@@ -12,12 +14,13 @@ public class Wall : Furniture
     public override void Start()
     {
         base.Start();
-        var temp = getClosestStockpile();
-        JobQueue.init.Enqueue(new Build(temp, this));
+
+        JobQueue.init.Enqueue(new Build(this, (int)GameManager.ITEMTYPE.WOOD));
     }
 
-    public Entity getClosestStockpile()
+    /*public Entity getClosestStockpile()
     {
+        //TODO: Fix
         TargetFilter stockFilter = new TargetFilter
         {
             Accepts = e => e.GetComponent<StockPile>() && e.GetComponent<StockPile>().isFull && e.GetComponent<StockPile>().inventory.inInv.GetComponent<Resource>().itemType == Resource.ItemType.WOOD
@@ -30,6 +33,6 @@ public class Wall : Furniture
         }
 
         return null;
-    }
+    }*/
 
 }

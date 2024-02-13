@@ -8,6 +8,8 @@ public class MouseController : MonoBehaviour
 
     public GameObject Wall;
 
+
+    //TODO: Make mouse move and have drag functionality 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))

@@ -106,7 +106,6 @@ MonoBehaviour:
   alive: 1
   inventory: {fileID: 185867819281601763}
   displaySpr: {fileID: 4927893031554308446}
-  isFull: 0
 --- !u!61 &3653506720563810362
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -145,7 +144,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d830eb303183b0e4789b23582508150a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inInv: {fileID: 0}
+  x: 0
+  y: 0
+  r: 0
+  alive: 1
+  inInv: []
+  isStockpile: 0
+  isFull: 0
+  sr: {fileID: 4927893031554308446}
 --- !u!1 &7881940480412068233
 GameObject:
   m_ObjectHideFlags: 0

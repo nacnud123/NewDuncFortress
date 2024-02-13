@@ -8,12 +8,14 @@ public class Build : Job
     public Entity returnTo;
     public bool hasItem;
 
-    public Build(Entity _target, Entity _returnTo, Job _nextJob = null) : base("Building", _nextJob)
+    // TODO: Switch to haul
+    public Build(Entity _target, int _resourceID, Job _nextJob = null) : base("Building", _nextJob)
     {
         priority = JobPriority.Medium;
+
+        testing = _resourceID;
         target = _target;
         jobNode = target.currNode;
-        returnTo = _returnTo;
     }
 
     public override void init(Person _person)
@@ -23,9 +25,9 @@ public class Build : Job
 
     public override void tick()
     {
-        if (isAtLoc == false && jobNode != null)
+        if (isAtLoc == false)
         {
-            person.setJob(new Move(jobNode, this));
+            person.setJob(new Haul(testing, target, this, false));
         }
         if (isAtLoc)
         {
@@ -35,7 +37,9 @@ public class Build : Job
 
     public override void arrived()
     {
-        if (isAtLoc && target != null && hasItem)
+
+
+        /*if (isAtLoc && target != null && hasItem)
         {
             if (((Furniture)target).build())
             {
@@ -60,7 +64,7 @@ public class Build : Job
             target = returnTo;
             jobNode = target.currNode;
             isAtLoc = false;
-        }
+        }*/
     }
 
 }

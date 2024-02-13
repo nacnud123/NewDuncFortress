@@ -8,6 +8,7 @@ public class Move : Job
     private Node endNode;
     private Node realEndNode;
 
+    //TODO: Comment steps
     public Move(Node end, Job _nextJob = null) : base("Move", _nextJob)
     {
         endNode = end;
@@ -60,7 +61,7 @@ public class Move : Job
 
     public override void arrived()
     {
-        if (nextJob != null) // Refactor maybe
+        if (nextJob != null)
         {
             nextJob.isAtLoc = true;
             person.setJob(nextJob);

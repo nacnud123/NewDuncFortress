@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Farmplot : Entity
 {
-    public Inv cropInv;
+    public Entity cropInv;
     public SpriteRenderer displaySR;
 
     public bool isFull = false;
@@ -32,7 +32,7 @@ public class Farmplot : Entity
         tempCrop.GetComponent<Crop>().inPlot = this;
 
         isFull = true;
-        cropInv.inInv = crop;
+        cropInv = crop; // TODO: Switch to using inventory instead of just one Entity, it may not be necicary.
     }
 
     public void takePlant()
@@ -40,6 +40,6 @@ public class Farmplot : Entity
         displaySR.sprite = null;
 
         isFull = false;
-        cropInv.inInv = null;
+        cropInv = null;
     }
 }
