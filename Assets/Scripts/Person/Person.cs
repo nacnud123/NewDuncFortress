@@ -6,7 +6,7 @@ using DuncFortress.AStar;
 public class Person : Entity
 {
     public float wanderTime = 0;
-    public Job job;
+    public State job;
     public float moveTick = 0;
 
     public Inventory inventory;
@@ -62,7 +62,7 @@ public class Person : Entity
 
     }
 
-    public void setJob(Job job)
+    public void setJob(State job)
     {
         this.job = job;
         if (job != null) job.init(this);

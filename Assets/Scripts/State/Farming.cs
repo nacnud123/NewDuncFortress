@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using DuncFortress.AStar;
 
-public class Farming : Job
+public class Farming : State
 {
     public int cropID = 0;
     public bool cutPlants = false;
 
-    public Farming(int _cropId, Entity _target, Job _nextJob = null):base("Farming", _nextJob)
+    public Farming(int _cropId, Entity _target, State _nextJob = null):base("Farming", _nextJob)
     {
         priority = JobPriority.Medium;
         cropID = _cropId;

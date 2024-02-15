@@ -19,11 +19,11 @@ public class Resource : Entity
 
         if (GameManager.init.areOpenStockPiles())
         {
-            JobQueue.init.Enqueue(new Haul((int)itemType, this, null, true));
+            JobQueue.init.Enqueue(new Haul((int)itemType, this, null));
         }
         else
         {
-            JobQueue.init.waitingJobs.Add(new Haul((int)itemType, this, null, true));
+            JobQueue.init.waitingJobs.Add(new Haul((int)itemType, this, null));
             waiting = true;
             position = JobQueue.init.waitingJobs.Count - 1;
         }

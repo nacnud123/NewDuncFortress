@@ -12,6 +12,11 @@ public class Inventory : Entity // may not need to be an entity, could just stic
 
     public SpriteRenderer sr;
 
+    public override void Start()
+    {
+        // Just do nothing;
+    }
+
     public bool addItem(Resource item)
     {
         checkIfFull();

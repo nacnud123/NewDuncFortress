@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Build : Job
+public class Build : State
 {
     int testing;
     public Entity returnTo;
-    public bool hasItem;
+    public bool canBuild;
 
     // TODO: Switch to haul
-    public Build(Entity _target, int _resourceID, Job _nextJob = null) : base("Building", _nextJob)
+    public Build(Entity _target, int _resourceID, State _nextJob = null) : base("Building", _nextJob)
     {
         priority = JobPriority.Medium;
 
@@ -27,7 +27,7 @@ public class Build : Job
     {
         if (isAtLoc == false)
         {
-            person.setJob(new Haul(testing, target, this, false));
+            person.setJob(new Haul(testing, target, this));
         }
         if (isAtLoc)
         {

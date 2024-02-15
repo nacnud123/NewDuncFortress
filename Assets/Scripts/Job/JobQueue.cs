@@ -7,29 +7,29 @@ public class JobQueue : MonoBehaviour
 {
     public static JobQueue init;
 
-    public SortedList<Job.JobPriority, Job> globalJobQueue = new SortedList<Job.JobPriority, Job>();
-    [SerializeField] public List<Job> waitingJobs = new List<Job>();
+    public SortedList<State.JobPriority, State> globalJobQueue = new SortedList<State.JobPriority, State>();
+    [SerializeField] public List<State> waitingJobs = new List<State>();
 
     private void Awake()
     {
         init = this;
-        globalJobQueue = new SortedList<Job.JobPriority, Job>(new DuplicateKeyComparer<Job.JobPriority>(true));
+        globalJobQueue = new SortedList<State.JobPriority, State>(new DuplicateKeyComparer<State.JobPriority>(true));
     }
 
-    public void Enqueue(Job job)
+    public void Enqueue(State job)
     {
         Debug.Log($"Enqueue {job.name}");
         globalJobQueue.Add(job.priority, job);
     }
 
-    public Job Dequeue()
+    public State Dequeue()
     {
         if(globalJobQueue.Count == 0)
         {
             return null;
         }
 
-        Job job = globalJobQueue.Values[0];
+        State job = globalJobQueue.Values[0];
         globalJobQueue.RemoveAt(0);
         return job;
     }

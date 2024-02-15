@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using DuncFortress.AStar;
 
-public class Move : Job
+public class Move : State
 {
     private Node endNode;
     private Node realEndNode;
 
     //TODO: Comment steps
-    public Move(Node end, Job _nextJob = null) : base("Move", _nextJob)
+    public Move(Node end, State _nextJob = null) : base("Move", _nextJob)
     {
         endNode = end;
     }
