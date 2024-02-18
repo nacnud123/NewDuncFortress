@@ -22,8 +22,10 @@ public class Job
 
     public Entity parentEntity;
 
-    Dictionary<Resource, int> requestItems = new Dictionary<Resource, int>();
-    Dictionary<Resource, int> delivedItems = new Dictionary<Resource, int>();
+    public bool canTakeFromStockpile;
+
+    Dictionary<int, int> requestItems = new Dictionary<int, int>();
+    Dictionary<int, int> delivedItems = new Dictionary<int, int>();
 
 
     public int currJobTime { get; set; }
@@ -31,11 +33,12 @@ public class Job
 
     public bool isBeingWorked { get; set; }
 
-    public Job(Node _jobNode, Dictionary<Resource, int> _requestItems, Entity _parentEntity)
+    public Job(Node _jobNode, Dictionary<int, int> _requestItems, Entity _parentEntity, bool _canTakeFromStockpile)
     {
         jobNode = _jobNode;
         requestItems = _requestItems;
         parentEntity = _parentEntity;
+        canTakeFromStockpile = _canTakeFromStockpile;
     }
 
     public bool hasAllItem()
@@ -43,7 +46,7 @@ public class Job
         if (requestItems == null)
             return true;
 
-        foreach(Resource item in requestItems.Keys)
+        foreach(int item in requestItems.Keys)
         {
             if (delivedItems.ContainsKey(item) == false || delivedItems[item] >= requestItems[item])
                 return true;

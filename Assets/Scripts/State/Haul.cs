@@ -17,11 +17,14 @@ public class Haul : State
 {
     public int resourceID = 0;
     bool hasItem = false;
+    Job job;
+    Inventory tileInv;
 
-    public Haul(int _id, Entity _target, State _nextJob = null) : base("Haul", _nextJob) // Called first
+    public Haul(int _id, Entity _target, Job _job, State _nextJob = null) : base("Haul", _nextJob) // Called first
     {
         target = _target;
         resourceID = _id;
+        job = _job;
     }
 
     public override void init(Person _person) // Called second
@@ -39,45 +42,30 @@ public class Haul : State
 
         switch (haulAction)
         {
+            case HaulAction.DumpMaterial:
+                person.dropItem();
+                hasItem = false;
+                Finished();
+                break;
             case HaulAction.FindMaterial:
+                // Find a material somewhere
+                target = getClosestInventory();
+                jobNode = target.currNode;
+
                 person.setJob(new Move(jobNode, this));
                 break;
-            case HaulAction.DumpMaterial: // TODO: make so it dumps the stuff and not just delete the stuff
-                person.dropOffItem();
-                Finished();// <- maybe
-                break;
-            case HaulAction.PickupMaterial: // Put mat in inv
-                if (target.GetComponent<Resource>())
-                {
-                    person.pickUpItem((Resource)target); // TODO: Type cast bad, also make more dynamic
-                }
-                else
-                {
-                    person.pickUpItem((Resource)target.GetComponent<Inventory>().getItemWithID(resourceID)); // TODO: Type cast bad, also make more dynamic
-                }
+            case HaulAction.PickupMaterial:
+                tileInv = GridManager.init.getNodeFromVec3(person.transform.position).parentGameNode.tileInv;
+                person.pickUpItem((Resource)tileInv.getItemWithID(resourceID));
                 hasItem = true;
                 break;
-            case HaulAction.DeliverMaterial: // Go to deliver materials
-                if(nextJob != null)
-                {
-                    jobNode = nextJob.jobNode;
-                }
-                else
-                {
-                    target = getClosestInventory();
-                    jobNode = target.currNode;
-                }
-
-                person.setJob(new Move(jobNode, this));
+            case HaulAction.DeliverMaterial:
+                person.setJob(new Move(job.jobNode, this));
                 break;
-            case HaulAction.DropOffmaterial: // At dlivery location can drop materials off
-                person.dropOffItem(target.GetComponent<Inventory>()); // 5. Drop off item. Right now only works with stockpiles, need to make work with other locations like jobsites.
-                person.dropItem();
-                // TODO: Above - Typecast bad, can cause lots of errors, need to refactor.
-
-                if (nextJob != null) { nextJob.isAtLoc = true; }
-
-                Finished(); // Set the person's state to the next state
+            case HaulAction.DropOffmaterial:
+                tileInv = GridManager.init.getNodeFromVec3(person.transform.position).parentGameNode.tileInv;
+                person.dropOffItem(tileInv);
+                hasItem = false;
                 break;
         }
 
@@ -137,11 +125,20 @@ public class Haul : State
     public Entity getClosestInventory() // Find closest inventory that accepts the resourced
     {
         TargetFilter inventoryFilter = new TargetFilter();
-        inventoryFilter = new TargetFilter
+        if (job.canTakeFromStockpile)
         {
-            Accepts = e => e.acceptsResource(resourceID) && e.GetComponent<Inventory>()
-        };
-
+            inventoryFilter = new TargetFilter
+            {
+                Accepts = e => e.givesResources(resourceID) && e.GetComponent<Inventory>().isStockpile
+            };
+        }
+        else
+        {
+            inventoryFilter = new TargetFilter
+            {
+                Accepts = e => e.acceptsResource(resourceID) && !e.GetComponent<Inventory>().isStockpile
+            };
+        }
 
         Entity e = GameManager.init.findClosestEntity(person, person, inventoryFilter);
         if (e is not null)

@@ -20,7 +20,8 @@ public class Tree : Entity
         if(stamina <= 0)
         {
             alive = false;
-            Instantiate(dropItem, transform.position, Quaternion.identity);
+            GameObject tempObj = Instantiate(Resources.Load<GameObject>($"Resources/{dropItem.name}"), this.transform.position, Quaternion.identity);
+            currNode.parentGameNode.tileInv.addItem(tempObj.GetComponent<Resource>());
             return true;
         }
         return false;

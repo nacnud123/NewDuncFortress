@@ -27,7 +27,7 @@ public class Build : State
     {
         if (isAtLoc == false)
         {
-            person.setJob(new Haul(testing, target, this));
+            person.setJob(new Haul(testing, target,null, this));
         }
         if (isAtLoc)
         {

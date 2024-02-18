@@ -16,6 +16,7 @@ public class Move : State
 
     public override void init(Person _person)
     {
+        Debug.Log("Move init!");
         base.init(_person);
 
         pathArray = AStar.FindPath(person.currNode, endNode);
@@ -61,6 +62,7 @@ public class Move : State
 
     public override void arrived()
     {
+        //person.currNode = GridManager.init.getNodeFromVec3(person.transform.position);
         if (nextJob != null)
         {
             nextJob.isAtLoc = true;

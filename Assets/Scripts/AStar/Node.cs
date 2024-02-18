@@ -11,6 +11,7 @@ namespace DuncFortress.AStar
         public bool bObstacle;              //Does the node is an obstacle or not
         public Node parent;                 //Parent of the node in the linked list
         public Vector3 position;            //Position of the node
+        public GameNode parentGameNode;     //The gamenode that this node belongs to;
         #endregion
 
 

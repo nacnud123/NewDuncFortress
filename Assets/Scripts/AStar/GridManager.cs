@@ -76,7 +76,13 @@ namespace DuncFortress.AStar
                 {
                     Vector3 cellPos = GetGridCellCenter(index);
                     Node node = new Node(cellPos);
+
+                    GameObject tempObj = Instantiate(Resources.Load<GameObject>("GameNode"), cellPos, Quaternion.identity);
+                    tempObj.transform.parent = this.transform;
+                    tempObj.name = cellPos.ToString();
+
                     nodes[i, j] = node;
+                    node.parentGameNode = tempObj.GetComponent<GameNode>();
 
                     index++;
                 }
@@ -258,11 +264,14 @@ namespace DuncFortress.AStar
             }
         }
 
-        /*public Node getNodeFromVec3(Vector3 pos)
+        public Node getNodeFromVec3(Vector3 pos)
         {
-            Vector3 tempPos = GetGridCellCenter(GetGridIndex(pos));
-            return 
-        }*/
+            int indexCell = GetGridIndex(pos);
+            int col = GetColumn(indexCell);
+            int row = GetRow(indexCell);
+
+            return nodes[row, col];
+        }
 
         /// <summary>
         /// Show Debug Grids and obstacles inside the editor

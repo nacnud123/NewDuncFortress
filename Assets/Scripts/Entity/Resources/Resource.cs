@@ -13,13 +13,19 @@ public class Resource : Entity
 
     public GameManager.ITEMTYPE itemType;
 
+    Dictionary<Resource, int> requestItems = new Dictionary<Resource, int>()
+    {
+
+    };
+
     public override void Start()
     {
         base.Start();
 
         if (GameManager.init.areOpenStockPiles())
         {
-            JobQueue.init.Enqueue(new Haul((int)itemType, this, null));
+            Job job = new Job(currNode, null, this, false);
+            JobQueue.init.Enqueue(new Haul((int)itemType, this, job));
         }
         else
         {

@@ -30,6 +30,8 @@ public class Person : Entity
     public override void tick()
     {
         currNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(this.transform.position)));
+        //person.currNode = GridManager.init.getNodeFromVec3(person.transform.position);
+        // Above for some reson causes a memory leak and the game to crash.
 
         if (job != null)
         {
