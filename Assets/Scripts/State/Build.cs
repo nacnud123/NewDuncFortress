@@ -1,70 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DuncFortress.AStar;
 
-public class Build : State
+public class Build : Job
 {
-    int testing;
-    public Entity returnTo;
-    public bool canBuild;
+    bool hasResource = false;
+    public int resourceID = 0;
 
-    // TODO: Switch to haul
-    public Build(Entity _target, int _resourceID, State _nextJob = null) : base("Building", _nextJob)
+    public Build(int id, Entity _target, Job _nextJob = null) : base("Build", _nextJob)
     {
-        priority = JobPriority.Medium;
-
-        testing = _resourceID;
+        priority = JobPriority.High;
+        resourceID = id;
         target = _target;
-        jobNode = target.currNode;
+        
     }
 
     public override void init(Person _person)
     {
         base.init(_person);
+        Debug.Log("Build Init!");
+        jobNode = target.currNode;
     }
 
     public override void tick()
     {
-        if (isAtLoc == false)
-        {
-            person.setJob(new Haul(testing, target,null, this));
-        }
         if (isAtLoc)
         {
-            this.arrived();
+            arrived();
+        }
+        else
+        {
+            person.setJob(new Haul(resourceID, target, this, true));
         }
     }
 
     public override void arrived()
     {
-
-
-        /*if (isAtLoc && target != null && hasItem)
-        {
-            if (((Furniture)target).build())
-            {
-                person.dropOffItem();
-
-                Finished();
-            }
-        }
-        else if(isAtLoc && target != null)
-        {
-            if (target.GetComponent<StockPile>())
-            {
-                var tempTarget = target.GetComponent<StockPile>().inventory.inInv;
-
-                person.pickUpItem(tempTarget);
-
-                target.GetComponent<StockPile>().isFull = false;
-                target.GetComponent<StockPile>().inventory.inInv = null;
-            }
-
-            hasItem = true;
-            target = returnTo;
-            jobNode = target.currNode;
-            isAtLoc = false;
-        }*/
+        Debug.Log("Arrived!");
+        Finished();
+        base.arrived();
     }
+
+
+
 
 }

@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace DuncFortress.AStar
 {
+
+
     public class AStar
     {
         #region List fields

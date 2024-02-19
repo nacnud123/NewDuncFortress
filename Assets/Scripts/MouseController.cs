@@ -6,10 +6,10 @@ using DuncFortress.AStar;
 public class MouseController : MonoBehaviour
 {
 
-    public GameObject Wall;
+    public GameObject stockPile;
 
+    public GameObject wall;
 
-    //TODO: Make mouse move and have drag functionality 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -32,18 +32,38 @@ public class MouseController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
+            Debug.Log("Mouse 1");
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
 
             RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
             if (hit.collider != null)
             {
-               Vector3 targetPos = hit.point;
+                Vector3 targetPos = hit.point;
                 Debug.Log(targetPos);
                 Vector3 temp = GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(targetPos));
                 temp.z = 0;
-                Instantiate(Wall, temp, Quaternion.identity);
+                Instantiate(stockPile, temp, Quaternion.identity);
 
+                GridManager.init.getNodeFromVec3(temp).parentGameNode.tileInv.isStockpile = true;
+
+            }
+        }
+        
+        if (Input.GetMouseButtonDown(3))
+        {
+            Debug.Log("Mouse 1");
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
+
+            RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
+            if (hit.collider != null)
+            {
+                Vector3 targetPos = hit.point;
+                Debug.Log(targetPos);
+                Vector3 temp = GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(targetPos));
+                temp.z = 0;
+                Instantiate(wall, temp, Quaternion.identity);
 
             }
         }

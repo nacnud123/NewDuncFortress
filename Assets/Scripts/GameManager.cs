@@ -6,27 +6,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager init;
 
-
-    public enum ITEMTYPE
-    {
-        WOOD = 0,
-        ROCK = 1,
-        FOOD = 2
-    };
+    public const int WOOD = 0;
+    public const int ROCK = 1;
+    public const int FOOD = 2;
 
     public int woodAvail = 0;
 
     public List<Entity> entities = new List<Entity>();
-    public List<GameObject> cropObj = new List<GameObject>();
 
-    public Dictionary<int, int>  maxPileSize = new Dictionary<int, int>()
-    {
-        {(int)ITEMTYPE.WOOD, 2 },
-        {(int)ITEMTYPE.ROCK, 2 },
-        {(int)ITEMTYPE.FOOD, 2 }
-    };
-
-
+    public GameObject gameNodeObj;
 
     private void Awake()
     {
@@ -37,7 +25,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        for (int i = 0; i < entities.Count; i++) // TODO: Figure out tick system
+        for (int i = 0; i < entities.Count; i++) // Figure out tick system
         {
             Entity e = entities[i];
             e.tick();
@@ -55,7 +43,7 @@ public class GameManager : MonoBehaviour
         var temp = FindObjectsOfType(typeof(StockPile)) as StockPile[];
         foreach(StockPile s in temp)
         {
-            if (!s.inventory.checkIfFull()) { return true; }
+            if (!s.isFull) { return true; }
         }
         return false;
     }

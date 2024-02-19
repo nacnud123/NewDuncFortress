@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using DuncFortress.AStar;
 
-public class Wander : State
+public class Wander : Job
 {
     public float totalIdelTime = 0;
     private float timeSpendIdle;
-    public Wander(State _nextJob = null): base("Wander", _nextJob)
+    public Wander(Job _nextJob = null): base("Wander", _nextJob)
     {
         timeSpendIdle = 0f;
         totalIdelTime = Random.Range(.2f, 1.5f);

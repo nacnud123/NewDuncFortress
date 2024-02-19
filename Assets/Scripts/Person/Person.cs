@@ -6,7 +6,7 @@ using DuncFortress.AStar;
 public class Person : Entity
 {
     public float wanderTime = 0;
-    public State job;
+    public Job job;
     public float moveTick = 0;
 
     public Inventory inventory;
@@ -30,8 +30,6 @@ public class Person : Entity
     public override void tick()
     {
         currNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(this.transform.position)));
-        //person.currNode = GridManager.init.getNodeFromVec3(person.transform.position);
-        // Above for some reson causes a memory leak and the game to crash.
 
         if (job != null)
         {
@@ -64,35 +62,30 @@ public class Person : Entity
 
     }
 
-    public void setJob(State job)
+    public void setJob(Job job)
     {
         this.job = job;
         if (job != null) job.init(this);
     }
 
-    public void pickUpItem(Resource newItem)
+    public void pickUpItem(Entity newItem)
     {
-        if(!inventory.addItem(newItem))
-        {
-            return;
-        }
-        //newItem.transform.parent = this.transform;
-        //newItem.transform.position = this.transform.position;
+        inventory.inInv = newItem;
+        newItem.transform.parent = this.transform;
+        newItem.transform.position = this.transform.position;
     }
 
     public void dropOffItem(Inventory place = null) // = null may be redundent
     {
-        Debug.Log("Person DropOffItem!");
-        if (place != null)
+        inventory.inInv.transform.parent = place.displaySpr.gameObject.transform;
+        inventory.inInv.transform.position = place.displaySpr.gameObject.transform.position;
+        if(place != null)
         {
-            place.addItem(this.inventory);
+            place.dropOffItem(inventory.inInv);
         }
-    }
 
-    public void dropItem(Resource specificItem = null)
-    {
-        inventory.dropItem(specificItem);
-        inventory.sr.sprite = null;
+        //Destroy(inventory.inInv.gameObject);
+        inventory.inInv = null;
     }
     
 }

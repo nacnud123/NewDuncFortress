@@ -8,9 +8,9 @@ public class TestingButton : MonoBehaviour
     public GameObject target;
     public GameObject gotoTarget;
 
-    /*public void onButtonClick()
+    public void onButtonClick()
     {
-        person.setJob(new Gather(1, gotoTarget.GetComponent<Entity>()));
-    }*/
+        JobQueue.init.Enqueue(new Build(0, target.GetComponent<Entity>()));
+    }
 
 }

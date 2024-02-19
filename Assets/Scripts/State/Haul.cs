@@ -3,175 +3,156 @@ using System.Collections.Generic;
 using UnityEngine;
 using DuncFortress.AStar;
 
-
-public enum HaulAction
-{
-    DumpMaterial,
-    FindMaterial,
-    PickupMaterial,
-    DeliverMaterial,
-    DropOffmaterial
-}
-
-public class Haul : State
+public class Haul : Job
 {
     public int resourceID = 0;
     bool hasItem = false;
-    Job job;
-    Inventory tileInv;
+    public bool takeFromStockpile;
 
-    public Haul(int _id, Entity _target, Job _job, State _nextJob = null) : base("Haul", _nextJob) // Called first
+    public Entity returnTo;
+
+    public enum HaulActions
     {
-        target = _target;
+        pickUpItem, // Also find item?
+        goToItem,
+        dropOffItem
+    }
+
+    public Haul(int _id, Entity _target, Job _nextJob = null, bool _takeFromStockpile = false) : base("Haul", _nextJob) // Called first
+    {
+        takeFromStockpile = _takeFromStockpile;
+
+        if(!takeFromStockpile)
+            target = _target;
+
         resourceID = _id;
-        job = _job;
     }
 
     public override void init(Person _person) // Called second
     {
         base.init(_person);
 
-        jobNode = target.currNode;
+        if (takeFromStockpile)
+            target = getClosestInventory();
+
+        if(target != null)
+            jobNode = target.currNode;
     }
-
-
 
     public override void tick()
     {
-        HaulAction haulAction = nextAction();
+        HaulActions nextAction = NextAction();
 
-        switch (haulAction)
+        switch (nextAction)
         {
-            case HaulAction.DumpMaterial:
-                person.dropItem();
-                hasItem = false;
-                Finished();
-                break;
-            case HaulAction.FindMaterial:
-                // Find a material somewhere
-                target = getClosestInventory();
-                jobNode = target.currNode;
-
+            case HaulActions.goToItem:
                 person.setJob(new Move(jobNode, this));
+
                 break;
-            case HaulAction.PickupMaterial:
-                tileInv = GridManager.init.getNodeFromVec3(person.transform.position).parentGameNode.tileInv;
-                person.pickUpItem((Resource)tileInv.getItemWithID(resourceID));
-                hasItem = true;
+            case HaulActions.pickUpItem:
+                if(nextJob != null)
+                {
+                    
+                    person.pickUpItem(target.currNode.parentGameNode.tileInv.inInv); // 2.Pick up Item.
+                    hasItem = true;
+
+                    target.currNode.parentGameNode.tileInv.inInv = null;
+
+                    target = nextJob.target;
+                    jobNode = target.currNode; //3.5 set that new location
+                    isAtLoc = false;
+                }
+                else
+                {
+                    var tempTarget = getClosestInventory(); //3. Find return location.  Right now only works with stockpiles, need to make work with other locations like jobsites. Held in temp var to make sure it is not null (if no stockpiles are available).
+
+                    if (tempTarget == null) // If no open stockpiles
+                    {
+                        JobQueue.init.waitingJobs.Add(new Haul(resourceID, target));  // Add a new haul job to the waiting queue because there are no stockpiles available.
+                        Finished(); // Set the person's state to null or to the next state.
+                        return; // End the state because there are not stockpiles.
+                    }
+                    else // There are stockpiles so we are good to pick up the item and move it to the stockpile.
+                    {
+                        person.pickUpItem(target.currNode.parentGameNode.tileInv.inInv); // 2.Pick up Item.
+
+                        hasItem = true;
+
+                        target.currNode.parentGameNode.tileInv.inInv = null;
+
+                        target = tempTarget;
+                        jobNode = target.currNode; //3.5 set that new location
+                        isAtLoc = false;
+                    }
+                }
+
+                
+
                 break;
-            case HaulAction.DeliverMaterial:
-                person.setJob(new Move(job.jobNode, this));
-                break;
-            case HaulAction.DropOffmaterial:
-                tileInv = GridManager.init.getNodeFromVec3(person.transform.position).parentGameNode.tileInv;
-                person.dropOffItem(tileInv);
-                hasItem = false;
+            case HaulActions.dropOffItem:
+                if (nextJob != null)
+                    target = nextJob.target;
+
+                person.dropOffItem(target.currNode.parentGameNode.tileInv); // 5. Drop off item. Right now only works with stockpiles, need to make work with other locations like jobsites.
+
+                if(nextJob != null)
+                {
+                    nextJob.isAtLoc = true;
+                }
+
+                Finished(); // Set the person's state to the next state
                 break;
         }
-
-        /*if (isAtLoc == false && jobNode != null)
-        {
-            person.setJob(new Move(jobNode, this)); // 1. Go to Location. / 4. Go to return location
-        }
-        if (isAtLoc)
-        {
-            this.arrived(); // Arrived at item
-        }*/
-
     }
 
     public override int getCarried() { return hasItem ? resourceID : -1; }
 
-    public override void arrived()
+
+    public HaulActions NextAction()
     {
-        /* if (isAtLoc && hasItem)
-         {
-
-             return; // End the state because it is done;
-         }
-         if (isAtLoc)
-         {
-             var tempTarget = getClosestInventory(); //3. Find return location.  Right now only works with stockpiles, need to make work with other locations like jobsites. Held in temp var to make sure it is not null (if no stockpiles are available).
-
-             if (tempTarget == null) // If no open stockpiles
-             {
-                 JobQueue.init.waitingJobs.Add(new Haul(resourceID, target));  // Add a new haul job to the waiting queue because there are no stockpiles available.
-                 Finished(); // Set the person's state to null or to the next state.
-                 return; // End the state because there are not stockpiles.
-             }
-             else // There are stockpiles so we are good to pick up the item and move it to the stockpile.
-             {
-                 if (fromStockpile)
-                 {
-                     person.pickUpItem((Resource)target.GetComponent<Inventory>().getItemWithID(resourceID)); //TODO: Typecast bad, can cause lots of errors, need to fix
-                 }
-                 else
-                 {
-                     person.pickUpItem((Resource)target); // 2.Pick up Item. TODO: Typecast bad, can cause lots of errors, need to fix
-                 }
-
-                 hasItem = true;
-
-                 target = tempTarget;
-                 jobNode = target.currNode; //3.5 set that new location
-                 isAtLoc = false;
-             }
-
-         }*/
-
+        if(!isAtLoc && !hasItem)
+        {
+            return HaulActions.goToItem;
+        }
+        else if(isAtLoc && !hasItem)
+        {
+            return HaulActions.pickUpItem;
+        }
+        else if(!isAtLoc && hasItem)
+        {
+            return HaulActions.goToItem;
+        }
+        else
+        {
+            return HaulActions.dropOffItem;
+        }
+        
     }
 
-
-    public Entity getClosestInventory() // Find closest inventory that accepts the resourced
+    public Entity getClosestInventory() // Find closest stockpile that accepts the resource TODO: Make so it looks through all tiles to find the item it needs
     {
-        TargetFilter inventoryFilter = new TargetFilter();
-        if (job.canTakeFromStockpile)
+        TargetFilter stockFilter;
+        if (takeFromStockpile)
         {
-            inventoryFilter = new TargetFilter
+            stockFilter = new TargetFilter
             {
-                Accepts = e => e.givesResources(resourceID) && e.GetComponent<Inventory>().isStockpile
+                Accepts = e => e.currNode.parentGameNode.tileInv.isStockpile && e.currNode.parentGameNode.tileInv.givesResources(resourceID)
             };
         }
         else
         {
-            inventoryFilter = new TargetFilter
+            stockFilter = new TargetFilter
             {
-                Accepts = e => e.acceptsResource(resourceID) && !e.GetComponent<Inventory>().isStockpile
+                Accepts = e => e.currNode.parentGameNode.tileInv.isStockpile && !e.currNode.parentGameNode.tileInv.isFull()
             };
         }
 
-        Entity e = GameManager.init.findClosestEntity(person, person, inventoryFilter);
+        Entity e = GameManager.init.findClosestEntity(person, person, stockFilter);
         if (e is not null)
         {
             return e;
         }
         return null;
-    }
-
-    private HaulAction nextAction()
-    {
-        if(!isAtLoc && !hasItem)
-        {
-            return HaulAction.FindMaterial;
-        }
-        else if(isAtLoc && !hasItem)
-        {
-            isAtLoc = false;
-            return HaulAction.PickupMaterial;
-        }
-        else if(!isAtLoc && hasItem)
-        {
-            return HaulAction.DeliverMaterial;
-        }
-        else if(isAtLoc && hasItem)
-        {
-            return HaulAction.DropOffmaterial;
-        }
-        else
-        {
-            return HaulAction.DumpMaterial;
-        }
-
     }
 
 }

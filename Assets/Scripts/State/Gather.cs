@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using DuncFortress.AStar;
 
-public class Gather : State
+public class Gather : Job
 {
     bool hasResource = false;
     public int resourceID = 0;
 
-    public Gather(int id, Entity _target, State _nextJob = null):base("Gather", _nextJob)
+    public Gather(int id, Entity _target, Job _nextJob = null):base("Gather", _nextJob)
     {
         priority = JobPriority.High;
         resourceID = id;
@@ -57,7 +57,7 @@ public class Gather : State
             if (target.gatherResource(resourceID))
             {
                 hasResource = true;
-                Finished();
+                person.setJob(null);
             }
             //boreTime = 1000;
         }

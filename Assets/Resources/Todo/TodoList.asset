@@ -27,9 +27,9 @@ MonoBehaviour:
     index: 3
   items:
   - owner:
-      name: In Progress
-      color: {r: 0, g: 1, b: 1, a: 1}
-      index: 2
+      name: Normal
+      color: {r: 1, g: 1, b: 1, a: 1}
+      index: 0
     task: Stockpile slots
     isComplete: 0
   - owner:
@@ -54,53 +54,35 @@ MonoBehaviour:
       name: Normal
       color: {r: 1, g: 1, b: 1, a: 1}
       index: 0
-    task: Rocks
+    task: rocks
     isComplete: 0
   - owner:
       name: Normal
       color: {r: 1, g: 1, b: 1, a: 1}
       index: 0
-    task: Simple world generation
+    task: simple world generation
     isComplete: 0
   - owner:
       name: Normal
       color: {r: 1, g: 1, b: 1, a: 1}
       index: 0
-    task: Bigger map
-    isComplete: 0
-  - owner:
-      name: In Progress
-      color: {r: 0, g: 1, b: 1, a: 1}
-      index: 2
-    task: Camera controlls
+    task: bigger map
     isComplete: 0
   - owner:
       name: Normal
       color: {r: 1, g: 1, b: 1, a: 1}
       index: 0
-    task: Bug fixes
+    task: camera controlls
     isComplete: 0
   - owner:
-      name: In Progress
-      color: {r: 0, g: 1, b: 1, a: 1}
-      index: 2
+      name: Normal
+      color: {r: 1, g: 1, b: 1, a: 1}
+      index: 0
+    task: bug fixes
+    isComplete: 0
+  - owner:
+      name: Normal
+      color: {r: 1, g: 1, b: 1, a: 1}
+      index: 0
     task: Tick System
-    isComplete: 0
-  - owner:
-      name: Note
-      color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-      index: 3
-    task: Make people feel like actual people.
-    isComplete: 0
-  - owner:
-      name: Note
-      color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-      index: 3
-    task: Add personality to the people, wants, needs, likes, dislikes
-    isComplete: 0
-  - owner:
-      name: Normal
-      color: {r: 1, g: 1, b: 1, a: 1}
-      index: 0
-    task: Dynamic UI
     isComplete: 0

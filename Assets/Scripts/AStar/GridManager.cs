@@ -77,12 +77,14 @@ namespace DuncFortress.AStar
                     Vector3 cellPos = GetGridCellCenter(index);
                     Node node = new Node(cellPos);
 
-                    GameObject tempObj = Instantiate(Resources.Load<GameObject>("GameNode"), cellPos, Quaternion.identity);
-                    tempObj.transform.parent = this.transform;
-                    tempObj.name = cellPos.ToString();
+                    var gn = Instantiate(GameManager.init.gameNodeObj, cellPos, Quaternion.identity);
+                    gn.transform.parent = this.transform;
+                    gn.name = cellPos.ToString();
+
+                    node.parentGameNode = gn.GetComponent<GameNode>();
+
 
                     nodes[i, j] = node;
-                    node.parentGameNode = tempObj.GetComponent<GameNode>();
 
                     index++;
                 }
@@ -245,34 +247,6 @@ namespace DuncFortress.AStar
             return tile => tile == endNode;
         }
 
-        public void rebuildObsticalList()
-        {
-            obstacleList = GameObject.FindGameObjectsWithTag("Obstacle");
-
-            //Run through the bObstacle list and set the bObstacle position
-            if (obstacleList != null && obstacleList.Length > 0)
-            {
-                foreach (GameObject data in obstacleList)
-                {
-                    int indexCell = GetGridIndex(data.transform.position);
-                    int col = GetColumn(indexCell);
-                    int row = GetRow(indexCell);
-
-                    //Also make the node as blocked status
-                    nodes[row, col].MarkAsObstacle();
-                }
-            }
-        }
-
-        public Node getNodeFromVec3(Vector3 pos)
-        {
-            int indexCell = GetGridIndex(pos);
-            int col = GetColumn(indexCell);
-            int row = GetRow(indexCell);
-
-            return nodes[row, col];
-        }
-
         /// <summary>
         /// Show Debug Grids and obstacles inside the editor
         /// </summary>
@@ -325,6 +299,35 @@ namespace DuncFortress.AStar
                 Vector3 endPos = startPos + height * new Vector3(0.0f, 1.0f, 0.0f);
                 Debug.DrawLine(startPos, endPos, color);
             }
+        }
+
+        public void rebuildObsticalList()
+        {
+            obstacleList = GameObject.FindGameObjectsWithTag("Obstacle");
+
+            //Run through the bObstacle list and set the bObstacle position
+            if (obstacleList != null && obstacleList.Length > 0)
+            {
+                foreach (GameObject data in obstacleList)
+                {
+                    int indexCell = GetGridIndex(data.transform.position);
+                    int col = GetColumn(indexCell);
+                    int row = GetRow(indexCell);
+
+                    //Also make the node as blocked status
+                    nodes[row, col].MarkAsObstacle();
+                }
+            }
+        }
+
+        public Node getNodeFromVec3(Vector3 pos)
+        {
+            int indexCell = GetGridIndex(pos);
+            int col = GetColumn(indexCell);
+            int row = GetRow(indexCell);
+
+            //Also make the node as blocked status
+            return nodes[row, col];
         }
     }
 }

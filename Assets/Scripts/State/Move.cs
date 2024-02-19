@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using DuncFortress.AStar;
 
-public class Move : State
+public class Move : Job
 {
     private Node endNode;
     private Node realEndNode;
 
-    //TODO: Comment steps
-    public Move(Node end, State _nextJob = null) : base("Move", _nextJob)
+    public Move(Node end, Job _nextJob = null) : base("Move", _nextJob)
     {
         endNode = end;
     }
 
     public override void init(Person _person)
     {
-        Debug.Log("Move init!");
         base.init(_person);
 
         pathArray = AStar.FindPath(person.currNode, endNode);
@@ -62,8 +60,7 @@ public class Move : State
 
     public override void arrived()
     {
-        //person.currNode = GridManager.init.getNodeFromVec3(person.transform.position);
-        if (nextJob != null)
+        if (nextJob != null) // Refactor maybe
         {
             nextJob.isAtLoc = true;
             person.setJob(nextJob);

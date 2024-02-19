@@ -1,5 +1,4 @@
-/*
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DuncFortress.AStar;
@@ -8,59 +7,113 @@ public class Haul : Job
 {
     public int resourceID = 0;
     bool hasItem = false;
-    bool toStockpile = false;
-    bool pickUpItem = false;
+    public bool takeFromStockpile;
 
-    public Haul(int _id, Entity _target, Job _nextJob = null, bool _toStockpile = false) : base("Haul", _nextJob) // Called first
+    public Entity returnTo;
+
+    public enum HaulActions
     {
+        pickUpItem, // Also find item?
+        goToItem,
+        dropOffItem
+    }
+
+    public Haul(int _id, Entity _target, Job _nextJob = null, bool _takeFromStockpile = false) : base("Haul", _nextJob, _target) // Called first
+    {
+        takeFromStockpile = _takeFromStockpile;
+        if (takeFromStockpile)
+        {
+            returnTo = _target;
+        }
+        else
+        {
+            target = _target;
+        }
+
         resourceID = _id;
-        toStockpile = _toStockpile;
-        target = _target;
+
     }
 
     public override void init(Person _person) // Called second
     {
         base.init(_person);
-
-        if(target == null)
+        if (takeFromStockpile)
         {
-            target = getClosestInventory();
+            target = getClosestStockpile();
         }
-
         jobNode = target.currNode;
     }
 
-
-
     public override void tick()
     {
-        if(isAtLoc == false && jobNode != null)
-        {
-            person.setJob(new Move(jobNode, this)); // 1. Go to Location. / 4. Go to return location
-        }
-        if (isAtLoc)
-        {
-            this.arrived(); // Arrived at item
-        }
+        HaulActions nextAction = NextAction();
 
+        switch (nextAction)
+        {
+            case HaulActions.goToItem:
+                person.setJob(new Move(jobNode, this));
+
+                break;
+            case HaulActions.pickUpItem:
+
+                //Find location or go back to original
+                if (returnTo != null)
+                {
+
+                    person.pickUpItem(target.GetComponent<Inventory>().inInv); // 2.Pick up Item.
+                    target.GetComponent<Inventory>().inInv = null;
+
+                    hasItem = true;
+
+                    target = returnTo;
+                    jobNode = target.currNode;
+
+                    isAtLoc = false;
+                }
+                else
+                {
+                    var tempTarget = getClosestStockpile(); //3. Find return location.  Right now only works with stockpiles, need to make work with other locations like jobsites. Held in temp var to make sure it is not null (if no stockpiles are available).
+
+                    if (tempTarget == null) // If no open stockpiles
+                    {
+                        JobQueue.init.waitingJobs.Add(new Haul(resourceID, target));  // Add a new haul job to the waiting queue because there are no stockpiles available.
+                        Finished(); // Set the person's state to null or to the next state.
+                        return; // End the state because there are not stockpiles.
+                    }
+                    else // There are stockpiles so we are good to pick up the item and move it to the stockpile.
+                    {
+                        person.pickUpItem(target); // 2.Pick up Item.
+                        hasItem = true;
+
+                        target = tempTarget;
+                        jobNode = target.currNode; //3.5 set that new location
+                        isAtLoc = false;
+                    }
+                }
+                break;
+            case HaulActions.dropOffItem:
+                person.dropOffItem(target.GetComponent<Inventory>()); // 5. Drop off item. Right now only works with stockpiles, need to make work with other locations like jobsites.
+
+                if (nextJob != null) // Refactor maybe
+                {
+                    nextJob.isAtLoc = true;
+                }
+
+                Finished(); // Set the person's state to the next state
+                break;
+        }
     }
 
     public override int getCarried() { return hasItem ? resourceID : -1; }
 
-    public override void arrived()
+    /*public override void arrived()
     {
         if(isAtLoc && hasItem)
         {
+            person.dropOffItem(target.GetComponent<Inventory>()); // 5. Drop off item. Right now only works with stockpiles, need to make work with other locations like jobsites.
 
-            person.dropOffItem((Inventory)target); // 5. Drop off item. Right now only works with stockpiles, need to make work with other locations like jobsites.
-            person.dropItem();
-            // TODO: Above - Typecast bad, can cause lots of errors, need to refactor.
-
-            if (nextJob != null) { nextJob.isAtLoc = true; }
 
             Finished(); // Set the person's state to the next state
-
-           
             return; // End the state because it is done;
         }
         if (isAtLoc)
@@ -75,7 +128,7 @@ public class Haul : Job
             }
             else // There are stockpiles so we are good to pick up the item and move it to the stockpile.
             {
-                person.pickUpItem((Resource)target); // 2.Pick up Item. TODO: Typecast bad, can cause lots of errors, need to fix
+                person.pickUpItem(target); // 2.Pick up Item.
                 hasItem = true;
 
                 target = tempTarget;
@@ -88,59 +141,69 @@ public class Haul : Job
     }
 
 
-    public Entity getClosestInventory() // Find closest inventory that accepts the resourced
+    public HaulActions NextAction()
     {
-    TargetFilter inventoryFilter = new TargetFilter();
-    if (nextJob != null && nextJob.name == "Building") // May be redundent
-    {
-    Debug.Log("Building Haul!");
-    if (toStockpile)
-    {
-        inventoryFilter = new TargetFilter
+        if (!isAtLoc && !hasItem)
         {
-            Accepts = e => e.givesResources(resourceID) && e.GetComponent<StockPile>()
-        };
-    }
-    else
-    {
-        inventoryFilter = new TargetFilter
+            return HaulActions.goToItem;
+        }
+        else if (isAtLoc && !hasItem)
         {
-            Accepts = e => e.givesResources(resourceID) && !e.GetComponent<Inventory>()
-        };
-    }
-}
-else
-{
-    Debug.Log("Regular Haul!");
-    if (toStockpile)
-    {
-        inventoryFilter = new TargetFilter
+            return HaulActions.pickUpItem;
+        }
+        else if (!isAtLoc && hasItem)
         {
-            Accepts = e => e.acceptsResource(resourceID) && e.GetComponent<StockPile>()
-        };
-    }
-    else
-    {
-        inventoryFilter = new TargetFilter
+            return HaulActions.goToItem;
+        }
+        else
         {
-            Accepts = e => e.acceptsResource(resourceID) && !e.GetComponent<Inventory>()
+            return HaulActions.dropOffItem;
+        }
+
+    }
+
+    public Entity getClosestInventory() // Find closest stockpile that accepts the resource
+    {
+        TargetFilter stockFilter = new TargetFilter
+        {
+            Accepts = e => e.GetComponent<Inventory>() && !e.GetComponent<Inventory>().isFull()
         };
-    }
-}
 
-
-
-
-
-
-Entity e = GameManager.init.findClosestEntity(person, person, inventoryFilter);
-if (e is not null)
-{
-    return e;
-}
-return null;
+        Entity e = GameManager.init.findClosestEntity(person, person, stockFilter);
+        if (e is not null)
+        {
+            return e;
+        }
+        return null;
     }
 
-}
+    public Entity getClosestStockpile() // Find closest stockpile that accepts the resource
+    {
+        TargetFilter stockFilter;
+        if (takeFromStockpile)
+        {
+            stockFilter = new TargetFilter
+            {
+                Accepts = e => e.GetComponent<Inventory>() && e.GetComponent<Inventory>().isStockpile && e.GetComponent<Inventory>().givesResources(resourceID)
+            };
 
+        }
+        else
+        {
+            stockFilter = new TargetFilter
+            {
+                Accepts = e => e.GetComponent<Inventory>() && e.GetComponent<Inventory>().isStockpile
+            };
+        }
+
+
+        Entity e = GameManager.init.findClosestEntity(person, person, stockFilter);
+        if (e is StockPile)
+        {
+            return e;
+        }
+        return null;
+    }
+
+}
 */

@@ -7,36 +7,24 @@ public class Resource : Entity
     public bool waiting = false;
     public int position = 0;
 
-    public SpriteRenderer itemSR;
-
-    public int ammount = 1;
-
-    public GameManager.ITEMTYPE itemType;
-
-    Dictionary<Resource, int> requestItems = new Dictionary<Resource, int>()
+    public enum ItemType
     {
+        WOOD = GameManager.WOOD,
+        ROCK = GameManager.ROCK,
+        FOOD = GameManager.FOOD
+    }
 
-    };
+    public ItemType itemType;
 
     public override void Start()
     {
         base.Start();
 
-        if (GameManager.init.areOpenStockPiles())
-        {
-            Job job = new Job(currNode, null, this, false);
-            JobQueue.init.Enqueue(new Haul((int)itemType, this, job));
-        }
-        else
-        {
-            JobQueue.init.waitingJobs.Add(new Haul((int)itemType, this, null));
-            waiting = true;
-            position = JobQueue.init.waitingJobs.Count - 1;
-        }
-        
+        JobQueue.init.Enqueue(new Haul((int)itemType, this));
+
     }
 
-    private void FixedUpdate()
+    /*private void FixedUpdate()
     {
         if (GameManager.init.areOpenStockPiles() && waiting == true)
         {
@@ -44,5 +32,5 @@ public class Resource : Entity
             JobQueue.init.waitingJobs.RemoveAt(position);
             waiting = false;
         }
-    }
+    }*/
 }

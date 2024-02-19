@@ -5,15 +5,7 @@ using DuncFortress.AStar;
 
 public class GameNode : MonoBehaviour
 {
-    public Node currNode;
     public Inventory tileInv;
-    public bool isStockpile = false;
-
-    public void init()
-    {
-        this.tileInv = GetComponent<Inventory>();
-    }
-
-
-
+    public Furniture tileFurniture;
+    public Node currNode;
 }

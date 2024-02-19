@@ -10,9 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3653506720563810340}
   - component: {fileID: 3653506720563810341}
-  - component: {fileID: 3653506720563810363}
   - component: {fileID: 3653506720563810362}
-  - component: {fileID: 185867819281601763}
+  - component: {fileID: 2156373146926647095}
   m_Layer: 0
   m_Name: StockPile
   m_TagString: DropOff
@@ -88,24 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3653506720563810363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3653506720563810342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5af553494174a93478534bd5c129ee34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  x: 0
-  y: 0
-  r: 0.1
-  alive: 1
-  inventory: {fileID: 185867819281601763}
-  displaySpr: {fileID: 4927893031554308446}
 --- !u!61 &3653506720563810362
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -132,7 +113,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &185867819281601763
+--- !u!114 &2156373146926647095
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141,17 +122,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 3653506720563810342}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d830eb303183b0e4789b23582508150a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f89a2f2668c3c341ab1e6ecf3b2c302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   x: 0
   y: 0
   r: 0
   alive: 1
-  inInv: []
-  isStockpile: 0
-  isFull: 0
-  sr: {fileID: 4927893031554308446}
+  entityName: 
+  buildTime: 0
+  currBuildTime: 0
+  built: 0
+  sr: {fileID: 0}
+  displaySpritre: {fileID: 0}
 --- !u!1 &7881940480412068233
 GameObject:
   m_ObjectHideFlags: 0
