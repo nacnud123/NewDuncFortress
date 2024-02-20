@@ -13,6 +13,10 @@ public class Person : Entity
 
     [SerializeField] private int hp = 100;
     private int maxHp = 100;
+
+    public string personName = "Jim";
+    public int mood = 100;
+
     /*private int xp = 0;
     private int nextLevel = 1;
     private int level = 0;*/

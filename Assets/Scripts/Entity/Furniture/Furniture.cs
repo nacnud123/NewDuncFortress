@@ -12,7 +12,6 @@ public class Furniture : Entity
     public bool built = false;
 
     public SpriteRenderer sr;
-    public Sprite displaySpritre;
 
 
     public Furniture(string _name = "", int _buildTime = 20)
@@ -26,6 +25,7 @@ public class Furniture : Entity
         currBuildTime += 1;
         if(currBuildTime >= buildTime)
         {
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 100);
             built = true;
             this.transform.tag = "Obstacle";
 

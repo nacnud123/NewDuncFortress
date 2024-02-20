@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,12 @@ public class GameManager : MonoBehaviour
     public List<Entity> entities = new List<Entity>();
 
     public GameObject gameNodeObj;
+
+    [Header("Ui Stuff")]
+    public GameObject selectedPlayer;
+    public TMP_Text personNameText;
+    public TMP_Text personMoodText;
+    public TMP_Text personJobText;
 
     private void Awake()
     {
@@ -34,6 +41,19 @@ public class GameManager : MonoBehaviour
                 entities.RemoveAt(i--);
                 Destroy(e.gameObject);
             }
+        }
+
+        if(selectedPlayer != null)
+        {
+            personNameText.text = $"Name: {selectedPlayer.GetComponent<Person>().personName}";
+            personMoodText.text = $"Mood: {selectedPlayer.GetComponent<Person>().mood}%";
+            personJobText.text = $"Job: {selectedPlayer.GetComponent<Person>().job.ToString()}";
+        }
+        else
+        {
+            personNameText.text = $"Name: ";
+            personMoodText.text = $"Mood: ";
+            personJobText.text = $"Job: ";
         }
     }
 

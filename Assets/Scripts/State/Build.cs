@@ -37,9 +37,11 @@ public class Build : Job
 
     public override void arrived()
     {
-        Debug.Log("Arrived!");
-        Finished();
-        base.arrived();
+        if (target.GetComponent<Furniture>().build())
+        {
+            Finished();
+            base.arrived();
+        }
     }
 
 
