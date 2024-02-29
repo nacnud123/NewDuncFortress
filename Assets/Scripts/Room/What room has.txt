@@ -1,0 +1,5 @@
+Room type: bedroom, living room / common area, Dining room, hospital, storeroom, prison cell / barracks, barracks
+overall room stat
+Clean
+Beauty
+Space
