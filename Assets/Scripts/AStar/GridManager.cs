@@ -61,6 +61,11 @@ namespace DuncFortress.AStar
             CalculateObstacles();
         }
 
+        private void Update()
+        {
+            //Debug.Log($"Node size{nodes.Length}");
+        }
+
         /// <summary>
         /// Calculate which cells in the grids are mark as obstacles
         /// </summary>
@@ -83,6 +88,7 @@ namespace DuncFortress.AStar
 
                     node.parentGameNode = gn.GetComponent<GameNode>();
 
+                    node.currRoom = RoomManager.init.outside;
 
                     nodes[i, j] = node;
 

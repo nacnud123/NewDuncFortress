@@ -12,6 +12,7 @@ namespace DuncFortress.AStar
         public Node parent;                 //Parent of the node in the linked list
         public Vector3 position;            //Position of the node
         public GameNode parentGameNode;
+        public Room currRoom;
         #endregion
 
 

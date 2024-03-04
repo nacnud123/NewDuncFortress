@@ -7,8 +7,9 @@ public class Wall : Furniture
     public override void Start()
     {
         base.Start();
+        godModeBuild();
 
-        JobQueue.init.Enqueue(new Build(0, this));
+        //JobQueue.init.Enqueue(new Build(0, this));
 
     }
 }

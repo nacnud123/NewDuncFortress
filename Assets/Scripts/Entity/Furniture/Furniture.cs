@@ -29,11 +29,25 @@ public class Furniture : Entity
             built = true;
             this.transform.tag = "Obstacle";
 
+            currNode.parentGameNode.tileFurniture = this;
+
             GridManager.init.rebuildObsticalList();
+
 
             return true;
         }
         return false;
+    }
+
+    public void godModeBuild()
+    {
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 100);
+        built = true;
+        this.transform.tag = "Obstacle";
+
+        currNode.parentGameNode.tileFurniture = this;
+
+        GridManager.init.rebuildObsticalList();
     }
 
 

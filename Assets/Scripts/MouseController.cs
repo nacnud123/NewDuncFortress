@@ -11,20 +11,22 @@ public class MouseController : MonoBehaviour
     public GameObject wall;
 
     [Header("Zoom Settings")]
-    private float zoom;
-    private float zoomMultiplyer = 4f;
-    public float minZoom = 2f;
-    public float maxZoom = 12f;
-    private float vel = 0f;
-    private float smoothTime = .25f;
+    public float zoomSpeed = .05f;
+    public float zoomMin = .001f;
+    public float zoomMaz = 2.0f;
+    public float dragZensitivity = 1.0f;
+    public float zoomTarget = 11f;
 
     [Header("Movment Settings")]
-    private Vector3 lastPosition;
-    public float mouseSensitivity;
+    public bool isDragging = false;
+    private Vector3 lastFramePosition;
+    private Vector3 currFramePosition;
+    public Vector3 camPosition;
+
 
     private void Start()
     {
-        zoom = Camera.main.orthographicSize;
+        camPosition = this.transform.position;
     }
 
     private void Update()
@@ -80,22 +82,34 @@ public class MouseController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-        zoom -= scroll * zoomMultiplyer;
-        zoom = Mathf.Clamp(zoom, minZoom, maxZoom);
-        Camera.main.orthographicSize = Mathf.SmoothDamp(Camera.main.orthographicSize, zoom, ref vel, smoothTime);
-
-        if (Input.GetMouseButtonDown(2))
-        {
-            lastPosition = Input.mousePosition;
-        }
+        currFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         if (Input.GetMouseButton(2))
         {
-            Vector3 delta = lastPosition - Input.mousePosition;
-            transform.Translate(delta.x * mouseSensitivity, delta.y * mouseSensitivity, 0);
-            lastPosition = Input.mousePosition;
+            Vector3 diff = lastFramePosition - currFramePosition;
+
+            if (diff != Vector3.zero)
+            {
+                Camera.main.transform.Translate(diff);
+            }
         }
+
+        if (Camera.main.orthographicSize != zoomTarget)
+        {
+            float target = Mathf.Lerp(Camera.main.orthographicSize, zoomTarget, 10 * Time.deltaTime);
+            Camera.main.orthographicSize = Mathf.Clamp(target, 3f, 25f);
+        }
+
+        if (Input.GetAxis("Mouse ScrollWheel") > 0) { zoom(.1f); }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0) { zoom(-.1f); }
+
+        lastFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    }
+
+
+    private void zoom(float ammount)
+    {
+        zoomTarget = Camera.main.orthographicSize - (zoomSpeed * (Camera.main.orthographicSize * ammount));
     }
 
 }

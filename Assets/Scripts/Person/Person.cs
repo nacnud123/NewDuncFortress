@@ -33,7 +33,7 @@ public class Person : Entity
 
     public override void tick()
     {
-        currNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(this.transform.position)));
+        currNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(this.transform.position))); // So stupid, using this instead of getNodeFromVec3 because using that causes memory overflow. Why? I don't know 
 
         if (job != null)
         {

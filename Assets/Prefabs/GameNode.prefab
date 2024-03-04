@@ -132,6 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileInv: {fileID: 6129293692535307336}
   tileFurniture: {fileID: 0}
+  seen: 0
 --- !u!114 &6129293692535307336
 MonoBehaviour:
   m_ObjectHideFlags: 0
