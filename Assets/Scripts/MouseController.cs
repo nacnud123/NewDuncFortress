@@ -54,6 +54,11 @@ public class MouseController : MonoBehaviour
                 {
                     GameManager.init.selectedPlayer = null;
                 }
+
+                if (hit.collider.GetComponent<Furniture>())
+                {
+                    hit.collider.GetComponent<Furniture>().destroy();
+                }
             }
         }
 
@@ -67,7 +72,7 @@ public class MouseController : MonoBehaviour
             if (hit.collider != null)
             {
                 Vector3 targetPos = hit.point;
-                Debug.Log(targetPos);
+                //Debug.Log(targetPos);
                 Vector3 temp = GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(targetPos));
                 temp.z = 0;
                 
@@ -75,6 +80,16 @@ public class MouseController : MonoBehaviour
 
                 if(BuildingController.init.currBuildings == BuildingController.Buildings.Stockpile)
                     GridManager.init.getNodeFromVec3(temp).parentGameNode.tileInv.isStockpile = true;
+
+                /*if (BuildingController.init.currBuildings == BuildingController.Buildings.Wall || BuildingController.init.currBuildings == BuildingController.Buildings.Door)
+                {
+                    RoomManager.init.Flood(0, 0);
+                    Debug.Log("done");
+                    RoomManager.init.Find();
+                    Debug.Log($"New rooms! size: {RoomManager.init.rooms.Count}");
+                    RoomManager.init.resetValues();
+
+                }*/
 
             }
         }

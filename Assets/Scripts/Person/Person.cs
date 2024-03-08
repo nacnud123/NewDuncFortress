@@ -5,6 +5,11 @@ using DuncFortress.AStar;
 
 public class Person : Entity
 {
+    #region Tesing stuff
+    public Bed assignedBed;
+    #endregion
+
+
     public float wanderTime = 0;
     public Job job;
     public float moveTick = 0;
@@ -58,10 +63,17 @@ public class Person : Entity
             }
             else
             {
-                Debug.Log("No Job!");
+                //Debug.Log("No Job!");
                 setJob(new Wander());
             }
            
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            Debug.Log("Moveing to assigned bed");
+            setJob(new Move(assignedBed.currNode));
         }
 
     }

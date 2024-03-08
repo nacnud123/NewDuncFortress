@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1506461224292556290}
   - component: {fileID: 1506461224292556289}
-  - component: {fileID: 1506461224292556288}
-  - component: {fileID: 7100896072223314871}
+  - component: {fileID: 6383525319221130483}
+  - component: {fileID: 6558443609170505281}
   m_Layer: 0
-  m_Name: Wall
+  m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,8 +75,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -250169875, guid: 7dca58f668aa0eb4eaa0d0091d3daa39, type: 3}
-  m_Color: {r: 0.5686275, g: 0.28627452, b: 0, a: 0.5019608}
+  m_Sprite: {fileID: 343349651, guid: 7dca58f668aa0eb4eaa0d0091d3daa39, type: 3}
+  m_Color: {r: 0.7254902, g: 0.60784316, b: 0.1764706, a: 0.5019608}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1506461224292556288
+--- !u!114 &6383525319221130483
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1506461224292556319}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93cf0ff3b6702384fb7cb4125a763d4b, type: 3}
+  m_Script: {fileID: 11500000, guid: 81885617744334f4183e42b73d06d131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   x: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
   built: 0
   sr: {fileID: 1506461224292556289}
   beautyVal: 0
---- !u!61 &7100896072223314871
+--- !u!61 &6558443609170505281
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

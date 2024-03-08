@@ -28,8 +28,15 @@ public class RoomManager : MonoBehaviour
         rooms.Add(outside);
     }
 
-    private void Flood(int x, int y)
+
+    /// <summary>
+    /// Flood Fill. Won't detect nodes that are within a room. Check bug comment
+    /// </summary>
+    /// <param name="x">Start X pos</param>
+    /// <param name="y">Start Y pos</param>
+    public void Flood(int x, int y)
     {
+        // If the position of x and y are a wall or other object then it will fail. TODO: Fix or prevent
         if (x >= 0 && x < GridManager.init.numOfColumns && y >= 0 && y < GridManager.init.numOfRows)
         {
             if(GridManager.init.nodes[x, y].parentGameNode.seen == false && GridManager.init.nodes[x, y].parentGameNode.tileFurniture == null)
@@ -52,18 +59,25 @@ public class RoomManager : MonoBehaviour
         
     }
 
-    private void Find()
+    /// <summary>
+    /// After checking for enclosed spaces. Now assign them to a room, make a new room, or return them to the outside. Check bug comment
+    /// </summary>
+    public void Find()
     {
+        //Bugs: returning to the oustide is not tested yet. TODO: Fix by adding a way to remove walls.
+
         for(int i = 0; i < GridManager.init.numOfColumns; i++)
         {
             for (int j = 0; j < GridManager.init.numOfRows; j++)
             {
                 if (GridManager.init.nodes[i, j].parentGameNode.seen == false && GridManager.init.nodes[i, j].parentGameNode.tileFurniture == null)
                 {
-                    
+                    bool returnToOutside = false;
+                    Room oldRoom;
+                    //TODO: Need way to return room back to the outside
 
                     ArrayList nodeNeighbours = new ArrayList();
-                    GridManager.init.GetNeighbours(GridManager.init.nodes[i, j], nodeNeighbours);
+                    GridManager.init.GetNeighbours(GridManager.init.nodes[i, j], nodeNeighbours); 
                     
                     for(int q = 0; q < nodeNeighbours.Count; q++) // If a room already exists asign it to the node.
                     {
@@ -72,9 +86,15 @@ public class RoomManager : MonoBehaviour
                             GridManager.init.nodes[i, j].currRoom = ((Node)nodeNeighbours[q]).currRoom;
                             GridManager.init.nodes[i, j].currRoom.AssignNode(GridManager.init.nodes[i, j]);
                         }
+                        if (((Node)nodeNeighbours[q]).currRoom == outside)
+                        {
+                            Debug.Log("Outside!");
+                            returnToOutside = true;
+                            break;
+                        }
                     }
 
-                    if(GridManager.init.nodes[i, j].currRoom == null)
+                    if(GridManager.init.nodes[i, j].currRoom == null && !returnToOutside) // If a room does not exist make a new room and assign the node to it
                     {
                         Room newRoom = new Room();
                         newRoom.ID = Random.Range(10, 501);
@@ -82,13 +102,28 @@ public class RoomManager : MonoBehaviour
                         rooms.Add(newRoom);
                         GridManager.init.nodes[i, j].currRoom = newRoom;
                         GridManager.init.nodes[i, j].currRoom.AssignNode(GridManager.init.nodes[i, j]);
+                        // Maybe call updateRoom / update stats
+                    }
+
+                    if (returnToOutside) // if the room should be returned to the outside. Bug
+                    {
+                        Debug.Log("Return node to outside");
+                        oldRoom = GridManager.init.nodes[i, j].currRoom;
+                        GridManager.init.nodes[i, j].currRoom.UnassignNode(GridManager.init.nodes[i, j]);
+                        GridManager.init.nodes[i, j].currRoom = outside;
+
+                        if (oldRoom.isRoomEmpty())
+                        {
+                            Debug.Log($"Room with {oldRoom.ID} has been removed because it is empty");
+                            rooms.Remove(oldRoom);
+                        }
                     }
                 }
             }
         }
     }
 
-    private void resetValues()
+    public void resetValues() // Resets all of the values. So it can all be checked again. TODO: Maybe find new way?
     {
         for (int i = 0; i < GridManager.init.numOfColumns; i++)
         {
@@ -101,10 +136,8 @@ public class RoomManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F)) // Testing code
         {
-            rooms.Clear(); // Don't do this please change
-            rooms.Add(outside);
             Flood(0, 0);
             Debug.Log("done");
             Find();
@@ -113,9 +146,9 @@ public class RoomManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            
-            
-            
+            Find();
+            Flood(0, 0);
+            resetValues();
         }
 
     }
