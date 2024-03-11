@@ -15,6 +15,7 @@ public class Room
         Storeroom = 5
     }
 
+    public Color roomColor;
 
     public List<Node> roomNodes = new List<Node>();
     public int ID;
@@ -26,6 +27,8 @@ public class Room
     public float space;
     public float beauty;
     #endregion
+
+
 
     public bool isOutside()
     {

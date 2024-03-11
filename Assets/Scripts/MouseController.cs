@@ -58,6 +58,12 @@ public class MouseController : MonoBehaviour
                 if (hit.collider.GetComponent<Furniture>())
                 {
                     hit.collider.GetComponent<Furniture>().destroy();
+
+                    /*RoomManager.init.Flood(0, 0);
+                    Debug.Log("done");
+                    RoomManager.init.Find();
+                    Debug.Log($"New rooms! size: {RoomManager.init.rooms.Count}");
+                    RoomManager.init.resetValues();*/
                 }
             }
         }
@@ -76,27 +82,34 @@ public class MouseController : MonoBehaviour
                 Vector3 temp = GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(targetPos));
                 temp.z = 0;
                 
-                Instantiate(BuildingController.init.currentBuildingObj, temp, Quaternion.identity);
-
-                if(BuildingController.init.currBuildings == BuildingController.Buildings.Stockpile)
-                    GridManager.init.getNodeFromVec3(temp).parentGameNode.tileInv.isStockpile = true;
-
-                /*if (BuildingController.init.currBuildings == BuildingController.Buildings.Wall || BuildingController.init.currBuildings == BuildingController.Buildings.Door)
+                if(GridManager.init.getNodeFromVec3(temp).parentGameNode.tileFurniture == null)
                 {
-                    RoomManager.init.Flood(0, 0);
-                    Debug.Log("done");
-                    RoomManager.init.Find();
-                    Debug.Log($"New rooms! size: {RoomManager.init.rooms.Count}");
-                    RoomManager.init.resetValues();
+                    Instantiate(BuildingController.init.currentBuildingObj, temp, Quaternion.identity);
 
-                }*/
+                    if (BuildingController.init.currBuildings == BuildingController.Buildings.Stockpile)
+                        GridManager.init.getNodeFromVec3(temp).parentGameNode.tileInv.isStockpile = true;
+
+                    /*if (BuildingController.init.currBuildings == BuildingController.Buildings.Wall || BuildingController.init.currBuildings == BuildingController.Buildings.Door)
+                    {
+                        RoomManager.init.Flood(0, 0);
+                        Debug.Log("done");
+                        RoomManager.init.Find();
+                        Debug.Log($"New rooms! size: {RoomManager.init.rooms.Count}");
+                        RoomManager.init.resetValues();
+
+                    }*/
+                }
+
+                
+
 
             }
         }
-    }
 
-    private void FixedUpdate()
-    {
+
+
+
+        //Camera Movement
         currFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         if (Input.GetMouseButton(2))

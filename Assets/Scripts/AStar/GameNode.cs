@@ -10,4 +10,6 @@ public class GameNode : MonoBehaviour
     public Node currNode;
 
     public bool seen = false;
+
+    public SpriteRenderer sr;
 }

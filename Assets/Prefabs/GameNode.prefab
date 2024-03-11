@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 6129293692535307342}
   - component: {fileID: 6129293692535307343}
   - component: {fileID: 6129293692535307336}
+  - component: {fileID: 4088474066907011016}
   m_Layer: 0
   m_Name: GameNode
   m_TagString: Untagged
@@ -133,6 +134,7 @@ MonoBehaviour:
   tileInv: {fileID: 6129293692535307336}
   tileFurniture: {fileID: 0}
   seen: 0
+  sr: {fileID: 4088474066907011016}
 --- !u!114 &6129293692535307336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,3 +154,55 @@ MonoBehaviour:
   displaySpr: {fileID: 6129293692209964625}
   isStockpile: 0
   inInv: {fileID: 0}
+--- !u!212 &4088474066907011016
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6129293692535307337}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: -1
+  m_Sprite: {fileID: -1700923423, guid: 7dca58f668aa0eb4eaa0d0091d3daa39, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0

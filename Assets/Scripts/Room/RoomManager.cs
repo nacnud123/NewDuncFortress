@@ -5,7 +5,7 @@ using DuncFortress.AStar;
 
 public class RoomManager : MonoBehaviour
 {
-    public Room outside;
+    public Room outside = new Room();
 
     public List<Room> rooms;
 
@@ -21,7 +21,7 @@ public class RoomManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        outside = new Room();
+        //outside = new Room();
 
         rooms = new List<Room>();
 
@@ -42,6 +42,22 @@ public class RoomManager : MonoBehaviour
             if(GridManager.init.nodes[x, y].parentGameNode.seen == false && GridManager.init.nodes[x, y].parentGameNode.tileFurniture == null)
             {
                 GridManager.init.nodes[x, y].parentGameNode.seen = true;
+                GridManager.init.nodes[x, y].parentGameNode.sr.color = Color.red;
+
+                if(!GridManager.init.nodes[x, y].currRoom.isOutside())
+                {
+                    Room oldRoom = new Room();
+                    Debug.Log($"Return node at {x}, {y} to outside");
+                    oldRoom = GridManager.init.nodes[x, y].currRoom;
+                    GridManager.init.nodes[x, y].currRoom.UnassignNode(GridManager.init.nodes[x, y]);
+                    GridManager.init.nodes[x, y].currRoom = outside;
+
+                    if (oldRoom.isRoomEmpty())
+                    {
+                        Debug.Log($"Room with {oldRoom.ID} has been removed because it is empty");
+                        rooms.Remove(oldRoom);
+                    }
+                }
 
                 Flood(x + 1, y);
                 Flood(x - 1, y);
@@ -72,8 +88,6 @@ public class RoomManager : MonoBehaviour
             {
                 if (GridManager.init.nodes[i, j].parentGameNode.seen == false && GridManager.init.nodes[i, j].parentGameNode.tileFurniture == null)
                 {
-                    bool returnToOutside = false;
-                    Room oldRoom;
                     //TODO: Need way to return room back to the outside
 
                     ArrayList nodeNeighbours = new ArrayList();
@@ -81,31 +95,29 @@ public class RoomManager : MonoBehaviour
                     
                     for(int q = 0; q < nodeNeighbours.Count; q++) // If a room already exists asign it to the node.
                     {
-                        if(((Node)nodeNeighbours[q]).currRoom != null)
+                        if(((Node)nodeNeighbours[q]).currRoom != outside)
                         {
                             GridManager.init.nodes[i, j].currRoom = ((Node)nodeNeighbours[q]).currRoom;
                             GridManager.init.nodes[i, j].currRoom.AssignNode(GridManager.init.nodes[i, j]);
-                        }
-                        if (((Node)nodeNeighbours[q]).currRoom == outside)
-                        {
-                            Debug.Log("Outside!");
-                            returnToOutside = true;
-                            break;
+                            GridManager.init.nodes[i, j].parentGameNode.sr.color = ((Node)nodeNeighbours[q]).currRoom.roomColor;
                         }
                     }
 
-                    if(GridManager.init.nodes[i, j].currRoom == null && !returnToOutside) // If a room does not exist make a new room and assign the node to it
+                    if(GridManager.init.nodes[i, j].currRoom == outside) // If a room does not exist make a new room and assign the node to it
                     {
                         Room newRoom = new Room();
                         newRoom.ID = Random.Range(10, 501);
+                        newRoom.roomColor = Random.ColorHSV();
                         Debug.Log($"New room with ID: {newRoom.ID}");
                         rooms.Add(newRoom);
                         GridManager.init.nodes[i, j].currRoom = newRoom;
                         GridManager.init.nodes[i, j].currRoom.AssignNode(GridManager.init.nodes[i, j]);
+                        GridManager.init.nodes[i, j].parentGameNode.sr.color = newRoom.roomColor;
+
                         // Maybe call updateRoom / update stats
                     }
 
-                    if (returnToOutside) // if the room should be returned to the outside. Bug
+                    /*if (returnToOutside) // if the room should be returned to the outside. Bug
                     {
                         Debug.Log("Return node to outside");
                         oldRoom = GridManager.init.nodes[i, j].currRoom;
@@ -117,7 +129,7 @@ public class RoomManager : MonoBehaviour
                             Debug.Log($"Room with {oldRoom.ID} has been removed because it is empty");
                             rooms.Remove(oldRoom);
                         }
-                    }
+                    }*/
                 }
             }
         }
