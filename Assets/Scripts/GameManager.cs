@@ -90,4 +90,14 @@ public class GameManager : MonoBehaviour
         }
         return closestEntity;
     }
+
+
+    public bool hasInvWithItem()
+    {
+
+
+
+
+        return false;
+    }
 }

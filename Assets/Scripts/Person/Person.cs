@@ -9,9 +9,17 @@ public class Person : Entity
     public Bed assignedBed;
     #endregion
 
+    #region Needs
+    /// <summary>
+    /// 0 - Sleep, 1 - Hunger, 2 - Fun
+    /// </summary>
+    public List<Need> needs = new List<Need>() { new Sleep() };
+    #endregion
 
     public float wanderTime = 0;
     public Job job;
+    public List<Job> globalJobs = new List<Job>();
+
     public float moveTick = 0;
 
     public Inventory inventory;
@@ -34,10 +42,21 @@ public class Person : Entity
     {
         r = .1f;
         moveTick = Random.Range(0, 13);
+        globalJobs.Add(new NeedJob());
+
+        foreach (Job j in globalJobs)
+        {
+            j.init(this);
+        }
     }
 
     public override void tick()
     {
+        foreach(Job j in globalJobs)
+        {
+            j.tick();
+        }
+
         currNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(this.transform.position))); // So stupid, using this instead of getNodeFromVec3 because using that causes memory overflow. Why? I don't know 
 
         if (job != null)
@@ -102,6 +121,13 @@ public class Person : Entity
 
         //Destroy(inventory.inInv.gameObject);
         inventory.inInv = null;
+    }
+
+    public void assignBed(Bed _inBed)
+    {
+        Debug.Log("Assigned Bed");
+
+        needs[0].restoreNeedFurn = _inBed;
     }
     
 }

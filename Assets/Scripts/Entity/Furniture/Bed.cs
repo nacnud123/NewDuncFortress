@@ -19,6 +19,15 @@ public class Bed : Furniture
         {
             Debug.Log("Bed built, starting room update");
             currNode.currRoom.updateRoom();
+
+            TargetFilter personFilter = new TargetFilter
+            {
+                Accepts = e => e.gameObject.GetComponent<Person>() && e.alive
+            };
+
+            Person e = (Person)GameManager.init.findClosestEntity(this, this, personFilter);
+
+            e.assignBed(this);
             return true;
         }
 
@@ -36,7 +45,16 @@ public class Bed : Furniture
         Debug.Log("Bed built, starting room update");
         currNode.currRoom.updateRoom();
 
-        
+        TargetFilter personFilter = new TargetFilter
+        {
+            Accepts = e => e.gameObject.GetComponent<Person>() && e.alive
+        };
+
+        Person e = (Person)GameManager.init.findClosestEntity(this, this, personFilter);
+
+        e.assignBed(this);
+
+
     }
 
 

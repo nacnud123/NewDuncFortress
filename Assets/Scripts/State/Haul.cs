@@ -11,6 +11,8 @@ public class Haul : Job
 
     public Entity returnTo;
 
+    // TODO: Add a way to claim items, so two people don't go to the same item
+
     public enum HaulActions
     {
         pickUpItem, // Also find item?
@@ -46,6 +48,7 @@ public class Haul : Job
         switch (nextAction)
         {
             case HaulActions.goToItem:
+
                 person.setJob(new Move(jobNode, this));
 
                 break;

@@ -7,6 +7,8 @@ public class Resource : Entity
     public bool waiting = false;
     public int position = 0;
 
+    public bool claimed = false;
+
     public enum ItemType
     {
         WOOD = GameManager.WOOD,
@@ -20,9 +22,14 @@ public class Resource : Entity
     {
         base.Start();
 
+        //Once made check to see if there is a stockpile that will accept this item
+
+
         JobQueue.init.Enqueue(new Haul((int)itemType, this));
 
     }
+
+    
 
     /*private void FixedUpdate()
     {

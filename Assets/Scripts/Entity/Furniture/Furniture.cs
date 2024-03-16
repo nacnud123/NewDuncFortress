@@ -17,6 +17,7 @@ public class Furniture : Entity
 
     public float beautyVal;
 
+    //TODO: Error checking, make sure that you actuly have an item that can be used to build the furniture, if not add to waiting queue.
 
     public Furniture(string _name = "", int _buildTime = 20)
     {
@@ -56,11 +57,12 @@ public class Furniture : Entity
 
     public virtual void destroy()
     {
+        this.alive = false;
         currNode.parentGameNode.tileFurniture = null;
         this.transform.tag = "Untagged";
         GridManager.init.rebuildObsticalList();
 
-        Destroy(this.gameObject);
+        //Destroy(this.gameObject);
     }
 
 
