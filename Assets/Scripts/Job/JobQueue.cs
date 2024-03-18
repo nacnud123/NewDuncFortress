@@ -8,7 +8,7 @@ public class JobQueue : MonoBehaviour
     public static JobQueue init;
 
     public SortedList<Job.JobPriority, Job> globalJobQueue = new SortedList<Job.JobPriority, Job>();
-    [SerializeField] public List<Job> waitingJobs = new List<Job>();
+    [SerializeField] public List<WaitingJob> waitingJobs = new List<WaitingJob>();
 
     private void Awake()
     {
@@ -28,9 +28,11 @@ public class JobQueue : MonoBehaviour
         {
             return null;
         }
-
+        
         Job job = globalJobQueue.Values[0];
         globalJobQueue.RemoveAt(0);
+
+
         return job;
     }
 }

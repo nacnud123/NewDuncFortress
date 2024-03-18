@@ -11,25 +11,45 @@ public class NeedJob : Job
 
     public override void init(Person _person)
     {
+        this.JobTime = 10;
         base.init(_person);
     }
 
     public override void tick()
     {
-        float needPercent = 0;
-        Need bigestNeed = null;
-        
-        foreach(Need ne in person.needs)
+        if (!isAtLoc)
         {
-            ne.Update();
-            //Debug.Log($"{ne.Name} - Ammount: {ne.Amount}");
-            if (ne.Amount > 50 && ne.Amount < 100 && ne.restoreNeedFurn != null && ne.inQueue == false)
+            foreach (Need ne in person.needs)
             {
-                JobQueue.init.Enqueue(new Move(ne.restoreNeedFurn.currNode));
-                ne.inQueue = true;
+                ne.Update();
+                //Debug.Log($"{ne.Name} - Ammount: {ne.Amount}");
+                if (ne.Amount > 50 && ne.Amount < 100 && ne.restoreNeedFurn != null && ne.inQueue == false)
+                {
+                    JobQueue.init.Enqueue(new Move(ne.restoreNeedFurn.currNode, this));
+                    ne.inQueue = true;
+                    currNeed = ne;
+                }
+
+            }
+        }
+        else
+        {
+            currNeed.beingWorkedOn = true;
+           //Debug.Log($"JobTime: {JobTime}. {currNeed.Name} - Ammount: {currNeed.Amount}");
+            currNeed.Amount -= Time.deltaTime * 5;
+            base.tick();
+            if(this.JobTime <= 0)
+            {
+                isAtLoc = false;
+                currNeed.inQueue = false;
+                currNeed.beingWorkedOn = false;
             }
 
         }
+        float needPercent = 0;
+        Need bigestNeed = null;
+        
+        
 
         
     }

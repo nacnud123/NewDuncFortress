@@ -18,7 +18,8 @@ public class WaitingJob
 	{
         if (updateAction())
         {
-
+			JobQueue.init.Enqueue(thisJob);
+			JobQueue.init.waitingJobs.Remove(this);
         }
 	}
 }

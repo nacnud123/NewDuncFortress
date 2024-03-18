@@ -20,7 +20,7 @@ public class Haul : Job
         dropOffItem
     }
 
-    public Haul(int _id, Entity _target, Job _nextJob = null, bool _takeFromStockpile = false) : base("Haul", _nextJob) // Called first
+    public Haul(int _id, Entity _target, Job _nextJob = null, bool _takeFromStockpile = false, bool _adjacent = false) : base("Haul", _nextJob) // Called first
     {
         takeFromStockpile = _takeFromStockpile;
 
@@ -28,6 +28,12 @@ public class Haul : Job
             target = _target;
 
         resourceID = _id;
+
+        if(nextJob != null)
+        {
+            adjacent = nextJob.adjacent;
+        }
+
     }
 
     public override void init(Person _person) // Called second
@@ -49,7 +55,7 @@ public class Haul : Job
         {
             case HaulActions.goToItem:
 
-                person.setJob(new Move(jobNode, this));
+                person.setJob(new Move(jobNode, this, adjacent));
 
                 break;
             case HaulActions.pickUpItem:
@@ -71,7 +77,12 @@ public class Haul : Job
 
                     if (tempTarget == null) // If no open stockpiles
                     {
-                        JobQueue.init.waitingJobs.Add(new Haul(resourceID, target));  // Add a new haul job to the waiting queue because there are no stockpiles available.
+                        WaitingJob waiting = new WaitingJob(this);
+                        waiting.updateAction += waitingUpdate;
+                        JobQueue.init.waitingJobs.Add(waiting);
+                        //TODO: Fix bug that makes it so waiting jobs don' work
+
+                        //JobQueue.init.waitingJobs.Add(new Haul(resourceID, target));  // Add a new haul job to the waiting queue because there are no stockpiles available.
                         Finished(); // Set the person's state to null or to the next state.
                         return; // End the state because there are not stockpiles.
                     }
@@ -157,5 +168,20 @@ public class Haul : Job
         }
         return null;
     }
+
+    public bool waitingUpdate()
+    {
+        if (takeFromStockpile)
+        {
+            return GameManager.init.areOpenInv();
+        }
+        else
+        {
+            return GameManager.init.areOpenStockpile();
+        }
+
+        
+    }
+
 
 }

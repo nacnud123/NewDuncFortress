@@ -29,6 +29,8 @@ public class Need
 
 	public bool inQueue = false;
 
+	public bool beingWorkedOn = false;
+
 	public float Amount
 	{
 		get
@@ -65,6 +67,10 @@ public class Need
 
 	public void Update()
     {
-		Amount += this.growthRate * Time.deltaTime;
+		if(beingWorkedOn == false)
+        {
+			Amount += this.growthRate * Time.deltaTime;
+		}
+		
     }
 }

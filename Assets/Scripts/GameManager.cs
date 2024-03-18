@@ -43,6 +43,11 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        for(int i =0; i < JobQueue.init.waitingJobs.Count; i++)
+        {
+            JobQueue.init.waitingJobs[i].jobCheck();
+        }
+
         if(selectedPlayer != null)
         {
             personNameText.text = $"Name: {selectedPlayer.GetComponent<Person>().personName}";
@@ -58,7 +63,7 @@ public class GameManager : MonoBehaviour
     }
 
     //Function that returns if there are open stockpiles
-    public bool areOpenStockPiles()
+   /*public bool areOpenStockPiles()
     {
         var temp = FindObjectsOfType(typeof(StockPile)) as StockPile[];
         foreach(StockPile s in temp)
@@ -66,7 +71,7 @@ public class GameManager : MonoBehaviour
             if (!s.isFull) { return true; }
         }
         return false;
-    }
+    }*/
 
 
     public Entity findClosestEntity(Entity inE, Entity exception = null, TargetFilter filter = null)
@@ -92,12 +97,42 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public bool hasInvWithItem()
+    public bool isInvWithItem(int id)
     {
+        Inventory[] gameInv = FindObjectsOfType(typeof(Inventory)) as Inventory[];
+        foreach(Inventory inv in gameInv)
+        {
+            if (inv.givesResources(id))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public bool areOpenInv()
+    {
+        Inventory[] gameInv = FindObjectsOfType(typeof(Inventory)) as Inventory[];
+        foreach (Inventory inv in gameInv)
+        {
+            if (!inv.isFull())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
-
-
+    public bool areOpenStockpile()
+    {
+        Inventory[] gameInv = FindObjectsOfType(typeof(Inventory)) as Inventory[];
+        foreach (Inventory inv in gameInv)
+        {
+            if (!inv.isFull() && inv.isStockpile)
+            {
+                return true;
+            }
+        }
         return false;
     }
 }

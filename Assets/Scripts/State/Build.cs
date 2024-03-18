@@ -10,10 +10,10 @@ public class Build : Job
 
     public Build(int id, Entity _target, Job _nextJob = null) : base("Build", _nextJob)
     {
+        adjacent = true;
         priority = JobPriority.High;
         resourceID = id;
         target = _target;
-        
     }
 
     public override void init(Person _person)
@@ -21,6 +21,13 @@ public class Build : Job
         base.init(_person);
         Debug.Log("Build Init!");
         jobNode = target.currNode;
+
+        if (!GameManager.init.isInvWithItem(resourceID))
+        {
+            WaitingJob waiting = new WaitingJob(this);
+            waiting.updateAction += jobWaitUpdate;
+            JobQueue.init.waitingJobs.Add(waiting);
+        }
     }
 
     public override void tick()
@@ -44,6 +51,11 @@ public class Build : Job
         }
     }
 
+
+    public bool jobWaitUpdate()
+    {
+        return GameManager.init.isInvWithItem(resourceID);
+    }
 
 
 

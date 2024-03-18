@@ -9,6 +9,13 @@ public class Inventory : Entity
 
     public bool isStockpile = false;
 
+    public string Type { get; private set; }
+
+    public int maxStackSize { get; set; }
+
+    public string category { get; private set; }
+
+
     public override void Start()
     {
         x = transform.position.x;

@@ -8,9 +8,14 @@ public class Move : Job
     private Node endNode;
     private Node realEndNode;
 
-    public Move(Node end, Job _nextJob = null) : base("Move", _nextJob)
+    public Move(Node end, Job _nextJob = null, bool _adjacent = false) : base("Move", _nextJob)
     {
         endNode = end;
+        if(nextJob != null)
+        {
+            adjacent = nextJob.adjacent;
+        }
+
     }
 
     public override void init(Person _person)
@@ -24,11 +29,11 @@ public class Move : Job
     public override void tick()
     {
         //Debug.Log("Move Tick!");
-        if(pathArray.Count > 2)
+        if (adjacent)
         {
             realEndNode = ((Node)pathArray[pathArray.Count - 2]);
         }
-        else // Just used for wander state.
+        else
         {
             realEndNode = ((Node)pathArray[pathArray.Count - 1]);
         }
