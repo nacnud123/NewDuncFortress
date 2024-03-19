@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
         Inventory[] gameInv = FindObjectsOfType(typeof(Inventory)) as Inventory[];
         foreach(Inventory inv in gameInv)
         {
-            if (inv.givesResources(id))
+            if (inv.givesResources(id) && inv.isStockpile)
             {
                 return true;
             }

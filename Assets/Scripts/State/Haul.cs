@@ -77,6 +77,9 @@ public class Haul : Job
 
                     if (tempTarget == null) // If no open stockpiles
                     {
+                        hasItem = false;
+                        isAtLoc = false;
+
                         WaitingJob waiting = new WaitingJob(this);
                         waiting.updateAction += waitingUpdate;
                         JobQueue.init.waitingJobs.Add(waiting);

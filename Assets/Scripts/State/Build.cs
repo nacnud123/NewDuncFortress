@@ -22,11 +22,12 @@ public class Build : Job
         Debug.Log("Build Init!");
         jobNode = target.currNode;
 
-        if (!GameManager.init.isInvWithItem(resourceID))
+        if (!GameManager.init.isInvWithItem(resourceID) && !isAtLoc)
         {
             WaitingJob waiting = new WaitingJob(this);
             waiting.updateAction += jobWaitUpdate;
             JobQueue.init.waitingJobs.Add(waiting);
+            Finished();
         }
     }
 

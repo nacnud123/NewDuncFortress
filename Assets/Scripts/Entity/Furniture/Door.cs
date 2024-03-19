@@ -7,22 +7,26 @@ public class Door : Furniture
     public override void Start()
     {
         base.Start();
-        this.godModeBuild();
+        //this.godModeBuild();
+        JobQueue.init.Enqueue(new Build(0, this));
+
     }
 
-    /*public override bool build()
+    public override bool build()
     {
         // TODO: Once build assign the bed to someone
         if (base.build())
         {
-            Debug.Log("Bed built, starting room update");
-            currNode.currRoom.updateRoom();
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 100);
+            built = true;
+
+            currNode.parentGameNode.tileFurniture = this;
             return true;
         }
 
         return false;
 
-    }*/
+    }
 
     public override void godModeBuild()
     {

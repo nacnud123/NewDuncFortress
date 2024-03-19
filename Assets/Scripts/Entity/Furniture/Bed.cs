@@ -9,7 +9,9 @@ public class Bed : Furniture
     public override void Start()
     {
         base.Start();
-        this.godModeBuild();
+        JobQueue.init.Enqueue(new Build(0, this));
+        //this.godModeBuild();
+        //this.build();
     }
 
     public override bool build()
