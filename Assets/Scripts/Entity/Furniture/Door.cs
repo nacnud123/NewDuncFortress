@@ -6,6 +6,7 @@ public class Door : Furniture
 {
     public override void Start()
     {
+        obsticle = false;
         base.Start();
         //this.godModeBuild();
         JobQueue.init.Enqueue(new Build(0, this));

@@ -17,6 +17,8 @@ public class Furniture : Entity
 
     public float beautyVal;
 
+    public bool obsticle;
+
     //TODO: Error checking, make sure that you actuly have an item that can be used to build the furniture, if not add to waiting queue.
 
     public Furniture(string _name = "", int _buildTime = 20)
@@ -32,7 +34,8 @@ public class Furniture : Entity
         {
             sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 100);
             built = true;
-            this.transform.tag = "Obstacle";
+            if(obsticle)
+                this.transform.tag = "Obstacle";
 
             currNode.parentGameNode.tileFurniture = this;
 

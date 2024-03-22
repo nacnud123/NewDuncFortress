@@ -34,6 +34,8 @@ public class Haul : Job
             adjacent = nextJob.adjacent;
         }
 
+
+
     }
 
     public override void init(Person _person) // Called second
@@ -45,6 +47,15 @@ public class Haul : Job
 
         if(target != null)
             jobNode = target.currNode;
+
+
+        /*if (!waitingUpdate())
+        {
+            WaitingJob waiting = new WaitingJob(this);
+            waiting.updateAction += waitingUpdate;
+            JobQueue.init.waitingJobs.Add(waiting);
+            Finished();
+        }*/
     }
 
     public override void tick()
@@ -79,11 +90,10 @@ public class Haul : Job
                     {
                         hasItem = false;
                         isAtLoc = false;
-
+                        //TODO: Fix bug that makes it so waiting jobs don' work
                         WaitingJob waiting = new WaitingJob(this);
                         waiting.updateAction += waitingUpdate;
                         JobQueue.init.waitingJobs.Add(waiting);
-                        //TODO: Fix bug that makes it so waiting jobs don' work
 
                         //JobQueue.init.waitingJobs.Add(new Haul(resourceID, target));  // Add a new haul job to the waiting queue because there are no stockpiles available.
                         Finished(); // Set the person's state to null or to the next state.

@@ -88,13 +88,6 @@ public class Person : Entity
            
         }
 
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            Debug.Log("Moveing to assigned bed");
-            setJob(new Move(assignedBed.currNode));
-        }
-
     }
 
     public void setJob(Job job)

@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Resource : Entity
 {
-    public bool waiting = false;
-    public int position = 0;
-
     public bool claimed = false;
+
+    public int maxItemStack;
+    public TMP_Text stackDisplay;
+    public int currentStackSize = 1;
 
     public enum ItemType
     {
@@ -25,10 +27,23 @@ public class Resource : Entity
         //Once made check to see if there is a stockpile that will accept this item
 
 
+
         JobQueue.init.Enqueue(new Haul((int)itemType, this));
 
     }
 
+    public int addToStack(int _amm)
+    {
+        for(int i =0; i < _amm; i++)
+        {
+            currentStackSize += 1;
+            if(currentStackSize > maxItemStack)
+            {
+                return _amm - maxItemStack;
+            }
+        }
+        return -1;
+    }
     
 
     /*private void FixedUpdate()

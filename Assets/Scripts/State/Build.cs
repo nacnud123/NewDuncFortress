@@ -47,6 +47,7 @@ public class Build : Job
     {
         if (target.GetComponent<Furniture>().build())
         {
+            
             Finished();
             base.arrived();
         }

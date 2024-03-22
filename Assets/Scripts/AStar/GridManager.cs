@@ -59,6 +59,8 @@ namespace DuncFortress.AStar
             //Get the list of obstacles objects tagged as "Obstacle"
             obstacleList = GameObject.FindGameObjectsWithTag("Obstacle");
             CalculateObstacles();
+
+            this.GetComponent<MapGenerator>().generateTrees();
         }
 
         private void Update()

@@ -6,8 +6,11 @@ public class Bed : Furniture
 {
     public Person assignedPerson;
 
+    
+
     public override void Start()
     {
+        obsticle = false;
         base.Start();
         JobQueue.init.Enqueue(new Build(0, this));
         //this.godModeBuild();
@@ -28,6 +31,8 @@ public class Bed : Furniture
             };
 
             Person e = (Person)GameManager.init.findClosestEntity(this, this, personFilter);
+
+            Destroy(currNode.parentGameNode.tileInv.inInv.gameObject);
 
             e.assignBed(this);
             return true;
