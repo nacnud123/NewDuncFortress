@@ -8,8 +8,6 @@ public class MapGenerator : MonoBehaviour
     [Header("Generation Settings")]
     public int pixWidth = 0;
     public int pixHeight = 0;
-    private Texture2D noiseTex;
-    private Color[] pix;
     public float scale;
     #endregion
 
@@ -20,19 +18,17 @@ public class MapGenerator : MonoBehaviour
 
     public void generateTrees()
     {
-        Debug.Log("Generating!");
-        noiseTex = new Texture2D(pixWidth, pixHeight);
-        pix = new Color[noiseTex.width * noiseTex.height];
+        //Debug.Log("Generating!");
         float randomorg = Random.Range(0, 100);
 
         float y = 0.0f;
-        while (y < noiseTex.height)
+        while (y < pixHeight)
         {
             float x = 0.0f;
-            while (x < noiseTex.height)
+            while (x < pixWidth)
             {
-                float xCoords = randomorg + x / noiseTex.width * scale;
-                float yCoord = randomorg + y / noiseTex.height * scale;
+                float xCoords = randomorg + x / pixWidth * scale;
+                float yCoord = randomorg + y / pixHeight * scale;
                 float sample = Mathf.PerlinNoise(xCoords, yCoord);
                 if (sample == Mathf.Clamp(sample, treeMin, treeMax))
                 {

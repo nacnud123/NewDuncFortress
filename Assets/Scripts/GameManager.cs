@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject gameNodeObj;
 
+    public int tick = 0;
+
     [Header("Ui Stuff")]
     public GameObject selectedPlayer;
     public TMP_Text personNameText;
@@ -42,6 +44,17 @@ public class GameManager : MonoBehaviour
                 Destroy(e.gameObject);
             }
         }
+        tick += 1;
+        if(tick % 2500 == 0)
+        {
+            for(int i = 0; i < entities.Count; i++)
+            {
+                if (entities[i].GetComponent<Person>())
+                {
+                    entities[i].GetComponent<Person>().updateMood();
+                }
+            }
+        }
 
         for(int i =0; i < JobQueue.init.waitingJobs.Count; i++)
         {
@@ -60,6 +73,8 @@ public class GameManager : MonoBehaviour
             personMoodText.text = $"Mood: ";
             personJobText.text = $"Job: ";
         }
+
+
     }
 
     //Function that returns if there are open stockpiles

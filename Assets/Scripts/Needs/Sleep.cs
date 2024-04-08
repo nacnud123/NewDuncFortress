@@ -7,7 +7,7 @@ public class Sleep : Need
     public Sleep()
     {
         Name = "Sleep";
-        growthRate = 2;
+        growthRate = 2f;
     }
 
 }

@@ -70,6 +70,7 @@ public class Need
 		if(beingWorkedOn == false)
         {
 			Amount += this.growthRate * Time.deltaTime;
+			//Debug.Log(amount);
 		}
 		
     }

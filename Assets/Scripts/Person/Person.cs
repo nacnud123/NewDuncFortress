@@ -14,6 +14,7 @@ public class Person : Entity
     /// 0 - Sleep, 1 - Hunger, 2 - Fun
     /// </summary>
     public List<Need> needs = new List<Need>() { new Sleep() };
+    private Dictionary<string, int> moodMod = new Dictionary<string, int>();
     #endregion
 
     public float wanderTime = 0;
@@ -118,9 +119,41 @@ public class Person : Entity
 
     public void assignBed(Bed _inBed)
     {
-        Debug.Log("Assigned Bed");
-
         needs[0].restoreNeedFurn = _inBed;
     }
-    
+
+    public void updateMood()
+    {
+        Debug.Log("Update Mood!");
+
+        foreach(Need n in needs)
+        {
+            if (n.Amount > 90) { addToMoodMod(n, -20); }
+            if (n.Amount > 80 && n.Amount < 90) { addToMoodMod(n, -15); }
+            if (n.Amount > 60 && n.Amount < 70) { addToMoodMod(n, -10); }
+            if(n.Amount > 50 && n.Amount < 60) { addToMoodMod(n, -5); }
+
+            if(n.Amount > 30 && n.Amount < 49) { addToMoodMod(n, 10); }
+            if(n.Amount > 0 && n.Amount < 30) { addToMoodMod(n, 5); }
+        }
+
+        foreach(string mName in moodMod.Keys)
+        {
+            mood += moodMod[mName];
+            mood = Mathf.Clamp(mood, 0, 100);
+        }
+
+    }
+
+    private void addToMoodMod(Need n, int amm)
+    {
+        if (moodMod.ContainsKey(n.Name))
+        {
+            moodMod[n.Name] = amm;
+        }
+        else
+        {
+            moodMod.Add(n.Name, amm);
+        }
+    }
 }

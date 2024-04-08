@@ -18,21 +18,47 @@ public class MouseController : MonoBehaviour
     public float zoomTarget = 11f;
 
     [Header("Movment Settings")]
-    public bool isDragging = false;
     private Vector3 lastFramePosition;
     private Vector3 currFramePosition;
     public Vector3 camPosition;
+
+    [Header("Dragging stuff")]
+    public GameObject previewObj;
+    public RectTransform selectionBox;
+    private Vector2 startPos;
+    private Vector2 endPosition;
+
+    private Vector3 dragStartPosition;
+    private List<GameObject> dragPreviweGameObjects;
+    private bool isDragging = false;
 
 
     private void Start()
     {
         camPosition = this.transform.position;
+        dragPreviweGameObjects = new List<GameObject>();
+        startPos = Vector2.zero;
+        endPosition = Vector2.zero;
     }
 
     private void Update()
     {
+        if (Input.GetMouseButton(0))
+        {
+            endPosition = Input.mousePosition;
+            
+            DrawVisuals();
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            selectStuff();
+            startPos = Vector2.zero;
+            endPosition = Vector2.zero;
+            DrawVisuals();
+        }
         if (Input.GetMouseButtonDown(0))
         {
+            startPos = Input.mousePosition;
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
 
@@ -44,7 +70,7 @@ public class MouseController : MonoBehaviour
                 if (hit.collider.GetComponent<Tree>())
                 {
                     Debug.Log("Clicked on tree!");
-                    JobQueue.init.Enqueue(new Gather(0,hit.collider.GetComponent<Entity>()));
+                    JobQueue.init.Enqueue(new Gather(0, hit.collider.GetComponent<Entity>()));
                 }
                 if (hit.collider.GetComponent<Person>())
                 {
@@ -81,8 +107,8 @@ public class MouseController : MonoBehaviour
                 //Debug.Log(targetPos);
                 Vector3 temp = GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(targetPos));
                 temp.z = 0;
-                
-                if(GridManager.init.getNodeFromVec3(temp).parentGameNode.tileFurniture == null)
+
+                if (GridManager.init.getNodeFromVec3(temp).parentGameNode.tileFurniture == null)
                 {
                     Instantiate(BuildingController.init.currentBuildingObj, temp, Quaternion.identity);
 
@@ -100,7 +126,7 @@ public class MouseController : MonoBehaviour
                     }*/
                 }
 
-                
+
 
 
             }
@@ -132,6 +158,10 @@ public class MouseController : MonoBehaviour
         else if (Input.GetAxis("Mouse ScrollWheel") < 0) { zoom(-.1f); }
 
         lastFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+
+
+        //UpdateDragging();
     }
 
 
@@ -139,5 +169,38 @@ public class MouseController : MonoBehaviour
     {
         zoomTarget = Camera.main.orthographicSize - (zoomSpeed * (Camera.main.orthographicSize * ammount));
     }
+   
 
+    private void DrawVisuals()
+    {
+        Vector2 boxStart = startPos;
+        Vector2 boxEnd = endPosition;
+
+        Vector2 boxCenter = (boxStart + boxEnd) / 2;
+        selectionBox.position = boxCenter;
+
+        Vector2 boxSize = new Vector2(Mathf.Abs(boxStart.x - boxEnd.x), Mathf.Abs(boxStart.y - boxEnd.y));
+
+        selectionBox.sizeDelta = boxSize;
+    }
+
+    private void selectStuff()
+    {
+        Vector2 min = selectionBox.anchoredPosition - (selectionBox.sizeDelta / 2);
+        Vector2 max = selectionBox.anchoredPosition + (selectionBox.sizeDelta / 2);
+
+        foreach(Entity e in GameManager.init.entities)
+        {
+            if (e.GetComponent<Tree>())
+            {
+                Vector3 screenPos = Camera.main.WorldToScreenPoint(e.transform.position);
+
+                if (screenPos.x > min.x && screenPos.x < max.x && screenPos.y > min.y && screenPos.y < max.y)
+                {
+                    JobQueue.init.Enqueue(new Gather(0, e));
+                }
+            }
+            
+        }
+    }
 }
