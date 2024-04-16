@@ -163,14 +163,14 @@ public class Haul : Job
         {
             stockFilter = new TargetFilter
             {
-                Accepts = e => e.currNode.parentGameNode.tileInv.isStockpile && e.currNode.parentGameNode.tileInv.givesResources(resourceID)
+                Accepts = e => !e.GetComponent<Person>() && e.currNode.parentGameNode.tileInv.isStockpile && e.currNode.parentGameNode.tileInv.givesResources(resourceID)
             };
         }
         else
         {
             stockFilter = new TargetFilter
             {
-                Accepts = e => e.currNode.parentGameNode.tileInv.isStockpile && !e.currNode.parentGameNode.tileInv.isFull()
+                Accepts = e => !e.GetComponent<Person>() && e.currNode.parentGameNode.tileInv.isStockpile && !e.currNode.parentGameNode.tileInv.isFull()
             };
         }
 

@@ -21,6 +21,7 @@ public class Tree : Entity
         {
             alive = false;
             var temp = Instantiate(dropItem, transform.position, Quaternion.identity);
+            temp.GetComponent<Resource>().currentStackSize = Random.Range(20, 50);
             this.currNode.parentGameNode.tileInv.inInv = temp;
             return true;
         }

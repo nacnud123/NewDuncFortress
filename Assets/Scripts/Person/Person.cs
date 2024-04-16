@@ -106,13 +106,24 @@ public class Person : Entity
 
     public void dropOffItem(Inventory place = null) // = null may be redundent
     {
-        inventory.inInv.transform.parent = place.displaySpr.gameObject.transform;
-        inventory.inInv.transform.position = place.displaySpr.gameObject.transform.position;
-        if(place != null)
+        //inventory.inInv.transform.parent = place.displaySpr.gameObject.transform;
+        //inventory.inInv.transform.position = place.displaySpr.gameObject.transform.position;
+        if (place != null)
         {
-            place.dropOffItem(inventory.inInv);
+            place.dropOffItem(inventory.inInv, this, place);
         }
 
+
+        if (inventory.inInv.GetComponent<Resource>().currentStackSize <= 0)
+        {
+            inventory.inInv.alive = false;
+            
+        }
+        else if(inventory.inInv.GetComponent<Resource>().needsJob)
+        {
+            inventory.inInv.GetComponent<Resource>().addHaulJob();
+            //inventory.inInv.transform.parent = null;
+        }
         //Destroy(inventory.inInv.gameObject);
         inventory.inInv = null;
     }

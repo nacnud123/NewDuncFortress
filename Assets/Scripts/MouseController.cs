@@ -28,15 +28,9 @@ public class MouseController : MonoBehaviour
     private Vector2 startPos;
     private Vector2 endPosition;
 
-    private Vector3 dragStartPosition;
-    private List<GameObject> dragPreviweGameObjects;
-    private bool isDragging = false;
-
-
     private void Start()
     {
         camPosition = this.transform.position;
-        dragPreviweGameObjects = new List<GameObject>();
         startPos = Vector2.zero;
         endPosition = Vector2.zero;
     }
