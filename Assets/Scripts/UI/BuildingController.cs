@@ -19,6 +19,8 @@ public class BuildingController : MonoBehaviour
         init = this;
     }
 
+    public bool active = false;
+
     [Header("Temp Stuff")]
     public GameObject stockPile;
     public GameObject wall;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Tree : Entity
+public class Rock : Entity
 {
     public int stamina = 100;
 
@@ -11,9 +11,9 @@ public class Tree : Entity
 
     public int resourceIDGiven;
 
-    private void Awake()
+    public override void Start()
     {
-        r = .1f;
+        base.Start();
     }
 
     public override bool gatherResource(int resourceID)

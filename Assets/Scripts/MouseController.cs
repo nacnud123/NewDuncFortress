@@ -5,11 +5,6 @@ using DuncFortress.AStar;
 
 public class MouseController : MonoBehaviour
 {
-
-    public GameObject stockPile;
-
-    public GameObject wall;
-
     [Header("Zoom Settings")]
     public float zoomSpeed = .05f;
     public float zoomMin = .001f;
@@ -28,28 +23,22 @@ public class MouseController : MonoBehaviour
     private Vector2 startPos;
     private Vector2 endPosition;
 
+    private Vector3 dragStartPosition;
+    private List<GameObject> dragPreviweGameObjects;
+    private bool isDragging = false;
+
+
     private void Start()
     {
         camPosition = this.transform.position;
+        dragPreviweGameObjects = new List<GameObject>();
         startPos = Vector2.zero;
         endPosition = Vector2.zero;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButton(0))
-        {
-            endPosition = Input.mousePosition;
-            
-            DrawVisuals();
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            selectStuff();
-            startPos = Vector2.zero;
-            endPosition = Vector2.zero;
-            DrawVisuals();
-        }
+        
         if (Input.GetMouseButtonDown(0))
         {
             startPos = Input.mousePosition;
@@ -61,11 +50,63 @@ public class MouseController : MonoBehaviour
             {
                 Vector3 targetPos = hit.point;
                 //Debug.Log(targetPos);
-                if (hit.collider.GetComponent<Tree>())
+
+                if(JobController.init.active)
                 {
-                    Debug.Log("Clicked on tree!");
-                    JobQueue.init.Enqueue(new Gather(0, hit.collider.GetComponent<Entity>()));
+                    if(JobController.init.jobSelected == JobController.Jobs.Gather)
+                    {
+                        if (hit.collider.GetComponent<Tree>())
+                        {
+                            Debug.Log("Clicked on tree!");
+                            JobQueue.init.Enqueue(new Gather(0, hit.collider.GetComponent<Entity>()));
+                        }
+                        if (hit.collider.GetComponent<Rock>())
+                        {
+                            Debug.Log("Clicked on rock!");
+                            JobQueue.init.Enqueue(new Gather(1, hit.collider.GetComponent<Entity>()));
+                        }
+                    }
+                    else if (JobController.init.jobSelected == JobController.Jobs.Destroy)
+                    {
+                        if (hit.collider.GetComponent<Furniture>())
+                        {
+                            hit.collider.GetComponent<Furniture>().destroy();
+
+                            /*RoomManager.init.Flood(0, 0);
+                            Debug.Log("done");
+                            RoomManager.init.Find();
+                            Debug.Log($"New rooms! size: {RoomManager.init.rooms.Count}");
+                            RoomManager.init.resetValues();*/
+                        }
+                    }
+
                 }
+
+                if(BuildingController.init.active)
+                {
+                    //Debug.Log(targetPos);
+                    Vector3 temp = GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(targetPos));
+                    temp.z = 0;
+
+                    if (GridManager.init.getNodeFromVec3(temp).parentGameNode.tileFurniture == null)
+                    {
+                        Instantiate(BuildingController.init.currentBuildingObj, temp, Quaternion.identity);
+
+                        if (BuildingController.init.currBuildings == BuildingController.Buildings.Stockpile)
+                            GridManager.init.getNodeFromVec3(temp).parentGameNode.tileInv.isStockpile = true;
+
+                        /*if (BuildingController.init.currBuildings == BuildingController.Buildings.Wall || BuildingController.init.currBuildings == BuildingController.Buildings.Door)
+                        {
+                            RoomManager.init.Flood(0, 0);
+                            Debug.Log("done");
+                            RoomManager.init.Find();
+                            Debug.Log($"New rooms! size: {RoomManager.init.rooms.Count}");
+                            RoomManager.init.resetValues();
+
+                        }*/
+                    }
+                }
+
                 if (hit.collider.GetComponent<Person>())
                 {
                     GameManager.init.selectedPlayer = hit.transform.gameObject;
@@ -74,61 +115,22 @@ public class MouseController : MonoBehaviour
                 {
                     GameManager.init.selectedPlayer = null;
                 }
-
-                if (hit.collider.GetComponent<Furniture>())
-                {
-                    hit.collider.GetComponent<Furniture>().destroy();
-
-                    /*RoomManager.init.Flood(0, 0);
-                    Debug.Log("done");
-                    RoomManager.init.Find();
-                    Debug.Log($"New rooms! size: {RoomManager.init.rooms.Count}");
-                    RoomManager.init.resetValues();*/
-                }
             }
         }
-
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButton(0))
         {
-            Debug.Log("Mouse 1");
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-
-            RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
-            if (hit.collider != null)
-            {
-                Vector3 targetPos = hit.point;
-                //Debug.Log(targetPos);
-                Vector3 temp = GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(targetPos));
-                temp.z = 0;
-
-                if (GridManager.init.getNodeFromVec3(temp).parentGameNode.tileFurniture == null)
-                {
-                    Instantiate(BuildingController.init.currentBuildingObj, temp, Quaternion.identity);
-
-                    if (BuildingController.init.currBuildings == BuildingController.Buildings.Stockpile)
-                        GridManager.init.getNodeFromVec3(temp).parentGameNode.tileInv.isStockpile = true;
-
-                    /*if (BuildingController.init.currBuildings == BuildingController.Buildings.Wall || BuildingController.init.currBuildings == BuildingController.Buildings.Door)
-                    {
-                        RoomManager.init.Flood(0, 0);
-                        Debug.Log("done");
-                        RoomManager.init.Find();
-                        Debug.Log($"New rooms! size: {RoomManager.init.rooms.Count}");
-                        RoomManager.init.resetValues();
-
-                    }*/
-                }
-
-
-
-
-            }
+            endPosition = Input.mousePosition;
+            if (startPos != endPosition)
+                DrawVisuals();
         }
-
-
-
-
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (startPos != endPosition)
+                selectStuff();
+            startPos = Vector2.zero;
+            endPosition = Vector2.zero;
+            DrawVisuals();
+        }
         //Camera Movement
         currFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -183,18 +185,47 @@ public class MouseController : MonoBehaviour
         Vector2 min = selectionBox.anchoredPosition - (selectionBox.sizeDelta / 2);
         Vector2 max = selectionBox.anchoredPosition + (selectionBox.sizeDelta / 2);
 
-        foreach(Entity e in GameManager.init.entities)
-        {
-            if (e.GetComponent<Tree>())
-            {
-                Vector3 screenPos = Camera.main.WorldToScreenPoint(e.transform.position);
+        Debug.Log($"Min: {min}, Max: {max}");
 
-                if (screenPos.x > min.x && screenPos.x < max.x && screenPos.y > min.y && screenPos.y < max.y)
+        if(JobController.init.active)
+        {
+            if(JobController.init.jobSelected == JobController.Jobs.Gather)
+            {
+                foreach (Entity e in GameManager.init.entities)
                 {
-                    JobQueue.init.Enqueue(new Gather(0, e));
+                    if (e.GetComponent<Tree>() || e.GetComponent<Rock>())
+                    {
+                        int rId = 0;
+                        if (e.GetComponent<Rock>())
+                            rId = 1;
+
+                        Vector3 screenPos = Camera.main.WorldToScreenPoint(e.transform.position);
+
+                        if (screenPos.x > min.x && screenPos.x < max.x && screenPos.y > min.y && screenPos.y < max.y)
+                        {
+                            JobQueue.init.Enqueue(new Gather(rId, e));
+                        }
+                    }
+
                 }
             }
-            
+            else if(JobController.init.jobSelected == JobController.Jobs.Destroy)
+            {
+                foreach (Entity e in GameManager.init.entities)
+                {
+                    if (e.GetComponent<Tree>())
+                    {
+                        Vector3 screenPos = Camera.main.WorldToScreenPoint(e.transform.position);
+
+                        if (screenPos.x > min.x && screenPos.x < max.x && screenPos.y > min.y && screenPos.y < max.y)
+                        {
+                            e.GetComponent<Furniture>().destroy();
+                        }
+                    }
+
+                }
+            }
         }
+        
     }
 }

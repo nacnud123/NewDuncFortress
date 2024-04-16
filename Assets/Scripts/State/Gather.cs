@@ -26,7 +26,7 @@ public class Gather : Job
         Debug.Log("Gather Tick!");
         if (isAtLoc == false && target != null)
         {
-            jobNode = new Node(GridManager.init.GetGridCellCenter(GridManager.init.GetGridIndex(target.transform.position)));
+            jobNode = target.currNode;
             person.setJob(new Move(jobNode, this));
         }
         if (isAtLoc)

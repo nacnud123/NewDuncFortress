@@ -249,7 +249,7 @@ GameObject:
   - component: {fileID: 6459086484263817302}
   - component: {fileID: 2257524146542887126}
   m_Layer: 0
-  m_Name: Log
+  m_Name: Stone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -312,7 +312,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 459247917, guid: 7dca58f668aa0eb4eaa0d0091d3daa39, type: 3}
+  m_Sprite: {fileID: -1470325431, guid: 7dca58f668aa0eb4eaa0d0091d3daa39, type: 3}
   m_Color: {r: 1, g: 0.38250035, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -343,4 +343,4 @@ MonoBehaviour:
   maxItemStack: 75
   stackDisplay: {fileID: 4949662505738079329}
   currentStackSize: 1
-  itemType: 0
+  itemType: 1

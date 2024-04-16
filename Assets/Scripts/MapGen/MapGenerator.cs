@@ -16,6 +16,11 @@ public class MapGenerator : MonoBehaviour
     public float treeMax;
     public GameObject treeObj;
 
+    [Header("Rock Settings")]
+    public float rockMin;
+    public float rockMax;
+    public GameObject rockObj;
+
     public void generateTrees()
     {
         //Debug.Log("Generating!");
@@ -33,6 +38,10 @@ public class MapGenerator : MonoBehaviour
                 if (sample == Mathf.Clamp(sample, treeMin, treeMax))
                 {
                     Instantiate(treeObj, new Vector3(x + .5f, y + .5f, 0), Quaternion.identity);
+                }
+                else if(sample == Mathf.Clamp(sample, rockMin, rockMax))
+                {
+                    Instantiate(rockObj, new Vector3(x + .5f, y + .5f, 0), Quaternion.identity);
                 }
                 x++;
 
